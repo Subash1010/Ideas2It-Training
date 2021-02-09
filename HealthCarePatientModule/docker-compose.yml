@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  cloudConfigServer:
+    image: cloud-config-server.jar
+    ports:
+      - '8888:8888'
+    environment:
+      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/Subash1010/Ideas2It-Training
+  db:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=Test@1234
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=Test@1234
+      - MYSQL_DATABASE=localdb
+      - MYSQL_ROOT_HOST=localhost
+    expose:
+      - '3306'
+  patientmodule:
+    image: patientmodule
+    ports:
+      - '8081:8081'
+    environment:
+      SPRING_APPLICATION_JSON: '{"spring": {"cloud": {"config": {"uri": "http://cloudConfigServer:8888"}}}}'
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/healthcare?createDatabaseIfNotExist=true&autoReconnect=true
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - cloudConfigServer
+      - db

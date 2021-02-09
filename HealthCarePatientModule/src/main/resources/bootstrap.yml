@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888    vault:
+      scheme: http
+      kv: 
+        enabled: true
+      uri: http://localhost:8200
+      token: 00000000-0000-0000-0000-000000000000
+  application:
+    name: HealthCarePatientModule
