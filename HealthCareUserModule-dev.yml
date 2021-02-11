@@ -1,2 +1,6 @@
 server:
   port: 8080
+elasticsearch:
+  clustername: ideas2it
+  host: localhost
+  port: 9300
