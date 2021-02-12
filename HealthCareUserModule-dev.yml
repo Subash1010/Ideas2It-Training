@@ -5,4 +5,4 @@ elasticsearch:
   host: localhost
   port: 9300
 logging:
-  file: C:/Users/Windows/Documents/Logs/elk-stack-user.log
+  filepath: C:/Users/Windows/Documents/Logs/elk-stack-user.log
