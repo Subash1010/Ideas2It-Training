@@ -4,3 +4,5 @@ elasticsearch:
   clustername: ideas2it
   host: localhost
   port: 9300
+logging:
+  file: C:\Users\Windows\Project\HealthCareUserModule\log\elk-stack.log
