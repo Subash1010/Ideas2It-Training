@@ -18,4 +18,4 @@ management:
         include: '*'
 logging:
   file:
-    path: C:/Users/Windows/Documents/Logs/UserLogs/temps
+    path: C:/Users/Windows/Documents/Logs/UserLogs/temp1
