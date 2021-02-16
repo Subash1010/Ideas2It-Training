@@ -6,4 +6,4 @@ elasticsearch:
   port: 9300
 logging:
   file:
-    path: C:/Users/Windows/Documents/Logs/UserLogs
+    path: C:/Users/Windows/Documents/Logs/UserLogs/temp
