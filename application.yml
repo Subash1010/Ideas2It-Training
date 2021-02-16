@@ -16,3 +16,6 @@ management:
     web:
       exposure:
         include: '*'
+logging:
+  file:
+    path: C:/Users/Windows/Documents/Logs/UserLogs/temps
