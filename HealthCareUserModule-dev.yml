@@ -7,3 +7,21 @@ elasticsearch:
 logging:
   file:
     path: C:/Users/Windows/Documents/Logs/UserLogs/temps
+management:
+  security:
+    enabled: false
+spring:
+  cloud:
+    bus:
+      refresh:
+        enabled: true
+      env:
+        enabled: true
+endpoints:
+  spring:
+    cloud:
+      bus:
+        refresh:
+          enabled: true
+      env:
+        enabled: true
