@@ -17,7 +17,5 @@ management:
       exposure:
         include: '*'
   security:
-    enabled: false        
-logging:
-  file:
-    path: C:/Users/Windows/Documents/Logs/UserLogs/temp
+    enabled: false
+    
