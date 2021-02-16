@@ -11,7 +11,13 @@ management:
   security:
     enabled: false
 spring:
+  kafka:
+    bootstrap-servers: http://localhost:9092
   cloud:
+    stream:
+      kafka:
+        binder:
+          autoAddPartitions: true
     bus:
       refresh:
         enabled: true
