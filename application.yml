@@ -20,4 +20,4 @@ management:
     enabled: false        
 logging:
   file:
-    path: C:/Users/Windows/Documents/Logs/UserLogs/temp1
+    path: C:/Users/Windows/Documents/Logs/UserLogs/temp
