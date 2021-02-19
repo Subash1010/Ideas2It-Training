@@ -1,6 +1,6 @@
 spring:  
   datasource:
-    url: jdbc:mysql://localhost:3306/healthcare?createDatabaseIfNotExist=true&autoReconnect=true
+    url: jdbc:mysql://db:3306/healthcare?createDatabaseIfNotExist=true&autoReconnect=true
     username: ${dbusername}
     password: ${dbpassword}
   jpa:
