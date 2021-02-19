@@ -3,6 +3,7 @@ package com.I2I.healthCare.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,60 +13,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.I2I.healthCare.Advice.TrackExecutionTime;
 import com.I2I.healthCare.Dto.UserDto;
-import com.I2I.healthCare.Models.AuthenticationRequest;
-import com.I2I.healthCare.Models.AuthenticationResponse;
 import com.I2I.healthCare.Service.UserService;
 
 /**
- * UserController works as End point for Patient module to perform CRUD
- * operations.
+ * UserController works as End point for User module to perform CRUD operations.
  * 
  * @author Subash_Sakthivel
  * @since 21.02
  *
  */
 @RestController
+@RefreshScope
 @RequestMapping("/users")
 public class UserController {
 
 	@Lazy
 	@Autowired
 	public UserController(UserService userService) {
-		super();
 		this.userService = userService;
 	}
 
 	private final UserService userService;
-
-	/**
-	 * home method is used to check if controller is reachable.
-	 * 
-	 * @return String
-	 */
-	@RequestMapping({ "/home" })
-	public String hello() {
-		return "This is User Page";
-	}
-
-	/**
-	 * createAuthenticatedToken method is used to generate new JWT token based on
-	 * the credentials used.
-	 * 
-	 * @param AuthenticationRequest
-	 * @return AuthenticationResponse
-	 */
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<AuthenticationResponse> createAuthenticatedToken(
-			@RequestBody AuthenticationRequest userAuthenticateRequest) throws Exception {
-		final String jwt = userService.extractJWT(userAuthenticateRequest);
-		return ResponseEntity.ok(new AuthenticationResponse(jwt));
-
-	}
 
 	/**
 	 * addUser method is used to register new Users.
@@ -75,8 +47,8 @@ public class UserController {
 	 */
 	@PostMapping("/")
 	@TrackExecutionTime
-	public String addUser(@RequestBody UserDto userDto) {
-		return userService.addNewUser(userDto);
+	public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
+		return ResponseEntity.ok(userService.addNewUser(userDto));
 	}
 
 	/**
@@ -108,7 +80,7 @@ public class UserController {
 	 * @param roleId
 	 * @return List of User Details
 	 */
-	@GetMapping("/getByRoleId/{roleId}")
+	@GetMapping("/role/{roleId}")
 	@TrackExecutionTime
 	public List<UserDto> getUserByRoleId(@PathVariable long roleId) {
 		return userService.getUserByRoleId(roleId);
@@ -134,7 +106,7 @@ public class UserController {
 	 */
 	@PutMapping("/")
 	@TrackExecutionTime
-	public String updateUser(@RequestBody UserDto userDto) {
+	public UserDto updateUser(@RequestBody UserDto userDto) {
 		return userService.updateUser(userDto);
 	}
 

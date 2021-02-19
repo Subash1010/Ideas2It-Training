@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +27,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Lazy
 	@Autowired
 	public JwtRequestFilter(UserService userService, JwtUtil jwtUtil) {
-		super();
 		this.userService = userService;
 		this.jwtUtil = jwtUtil;
 	}
@@ -33,6 +34,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private final UserService userService;
 
 	private final JwtUtil jwtUtil;
+
+	Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -47,10 +50,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			try {
 				userName = jwtUtil.extractUserName(jwt);
 			} catch (Exception exception) {
-				System.out.println("Unable to find Username for the requested JWT" + exception);
+				logger.error("Unable to find Username for the requested JWT" + exception);
 			}
 		} else {
-			System.out.println("AuthorizationHeader Doesn't Satisfy the condition");
+			logger.error("AuthorizationHeader Doesn't Satisfy the condition");
 		}
 
 		if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {

@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 import com.I2I.healthCare.Dao.PatientDao;
 import com.I2I.healthCare.Dto.PatientDto;
 import com.I2I.healthCare.Models.PatientEntity;
+import com.I2I.healthCare.Util.PatientDataUtil;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -27,13 +30,15 @@ public class PatientServiceImpl implements PatientService {
 
 	private final PatientDao patientDao;
 
+	Logger logger = LoggerFactory.getLogger(PatientServiceImpl.class);
+
 	@Override
 	public String addPatient(PatientDto patientDto) {
 		if (Objects.nonNull(patientDto)) {
-			PatientEntity patientEntity = PatientDto.convertToPatientEntity(patientDto);
+			PatientEntity patientEntity = PatientDataUtil.convertToPatientEntity(patientDto);
 			return patientDao.addPatient(patientEntity);
 		}
-		System.out.println("Error in Addition of new record - Empty Record Can't be Added");
+		logger.error("Error in Addition of new record - Empty Record Can't be Added");
 		return "Record not Added";
 	}
 
@@ -54,7 +59,7 @@ public class PatientServiceImpl implements PatientService {
 		Optional<PatientEntity> optionalPatientDetails = patientDao.getPatientDetailsById(pId);
 		if (optionalPatientDetails.isPresent() && !optionalPatientDetails.isEmpty()) {
 			PatientEntity patientEntity = optionalPatientDetails.get();
-			return PatientDto.convertToPatientDto(patientEntity);
+			return PatientDataUtil.convertToPatientDto(patientEntity);
 		} else {
 			return null;
 		}
@@ -63,10 +68,10 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public String updatePatientDetails(PatientDto patientDto) {
 		if (Objects.nonNull(patientDto)) {
-			PatientEntity patientEntity = PatientDto.convertToPatientEntity(patientDto);
+			PatientEntity patientEntity = PatientDataUtil.convertToPatientEntity(patientDto);
 			return patientDao.updatePatientDetails(patientEntity);
 		}
-		System.out.println("Error in Addition of new record - Empty Record Can't be Updated");
+		logger.error("Error in Addition of new record - Empty Record Can't be Updated");
 		return "Record not Updated";
 	}
 
@@ -86,7 +91,7 @@ public class PatientServiceImpl implements PatientService {
 		if (CollectionUtils.isEmpty(patientEntityList)) {
 			return new ArrayList<>();
 		} else {
-			return patientEntityList.stream().map(patientEntity -> PatientDto.convertToPatientDto(patientEntity))
+			return patientEntityList.stream().map(patientEntity -> PatientDataUtil.convertToPatientDto(patientEntity))
 					.collect(Collectors.toList());
 		}
 	}

@@ -1,10 +1,12 @@
 package com.I2I.healthCare.Dao;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -18,21 +20,24 @@ public class UserDaoImpl implements UserDao {
 	@Lazy
 	@Autowired
 	public UserDaoImpl(UserRepository userRepository) {
-		super();
 		this.userRepository = userRepository;
 	}
 
 	private final UserRepository userRepository;
 
+	Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+
 	@Override
-	public String addNewUser(UserEntity userEntity) {
+	public UserEntity addNewUser(UserEntity userEntity) {
+		UserEntity savedUserEntity = new UserEntity();
 		try {
-			userRepository.save(userEntity);
+			savedUserEntity = userRepository.save(userEntity);
 		} catch (Exception exception) {
-			System.out.println("Error in insertion of new record" + exception);
-			return "Record not Inserted";
+			logger.error("Error in insertion of new record" + exception);
+			return savedUserEntity;
 		}
-		return "Added new record Successfully!!!";
+		logger.info("Added new record Successfully!!!");
+		return savedUserEntity;
 	}
 
 	@Override
@@ -48,32 +53,38 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public String deleteById(long userId) {
 		try {
-			userRepository.deleteById(userId);
+			Optional<UserEntity> optionalUserEntity = getUserById(userId);
+			if (optionalUserEntity.isPresent() && !optionalUserEntity.isEmpty()) {
+				userRepository.deleteById(userId);
+			} else {
+				return "Record with User Id " + userId + " is not found for Deletion";
+			}
 		} catch (Exception exception) {
-			System.out.println("Error in Deletion of the record" + exception);
-			return "Record not Deleted";
+			logger.error("Error in Deletion of the record with User Id " + userId + StringUtils.EMPTY + exception);
+			return "Record with User Id  " + userId + "is not Deleted";
 		}
-		return "Record Deleted Successfully!!!";
+
+		return "Record with User Id " + userId + " Deleted Successfully!!!";
 	}
 
 	@Override
-	public String updateUser(UserEntity userEntity) {
+	public UserEntity updateUser(UserEntity userEntity) {
 		try {
 			UserEntity existingUserEntity = getUserById(userEntity.getUserId()).orElse(null);
 			if (Objects.nonNull(existingUserEntity)) {
+				existingUserEntity.setUserId(userEntity.getUserId());
 				existingUserEntity.setUserName(userEntity.getUserName());
+				existingUserEntity.setPassword(userEntity.getPassword());
 				existingUserEntity.setRoleEntity(userEntity.getRoleEntity());
-				existingUserEntity.setUpdatedBy(userEntity.getUserName());
-				existingUserEntity.setUpdatedAt(LocalDateTime.now());
-				userRepository.save(existingUserEntity);
+				return userRepository.save(existingUserEntity);
 			} else {
-				return "No Record is found for Updation";
+				logger.error("No Record is found for Updation");
+				return null;
 			}
 		} catch (Exception exception) {
-			System.out.println("Error in Updation of the record" + exception);
-			return "Record not Updated";
+			logger.error("Error in Updation of the record" + exception);
+			return null;
 		}
-		return "Record Updated Successfully!!!";
 	}
 
 }

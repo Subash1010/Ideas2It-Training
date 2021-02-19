@@ -6,7 +6,7 @@ public interface RoleDao {
 
 	String addNewRole(RoleEntity roleEntity);
 
-	String updateRole(RoleEntity roleEntity);
+	RoleEntity updateRole(RoleEntity roleEntity);
 
 	String deleteRoleById(long roleId);
 

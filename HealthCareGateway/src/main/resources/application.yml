@@ -1,0 +1,7 @@
+server:
+  port: 9100
+zuul:  routes:    patients:
+      path: /patients/**
+      service-id: HealthCarePatientModule
+      strip-prefix: false
+      url: http://localhost:8081/

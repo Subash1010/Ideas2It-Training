@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -24,10 +26,12 @@ import org.springframework.util.CollectionUtils;
 
 import com.I2I.healthCare.Dao.UserDao;
 import com.I2I.healthCare.Dto.UserDto;
+import com.I2I.healthCare.Index.UserIndex;
 import com.I2I.healthCare.Models.AuthenticationRequest;
 import com.I2I.healthCare.Models.UserEntity;
 import com.I2I.healthCare.Repository.UserRepository;
 import com.I2I.healthCare.Util.JwtUtil;
+import com.I2I.healthCare.Util.UserDataUtil;
 
 @Service
 @Profile(value = { "dev", "prod" })
@@ -36,12 +40,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Lazy
 	@Autowired
 	public UserServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, UserDao userDao,
-			JwtUtil jwtUtil) {
+			JwtUtil jwtUtil, UserIndexService userIndexService) {
 		super();
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.userDao = userDao;
 		this.jwtUtil = jwtUtil;
+		this.userIndexService = userIndexService;
 	}
 
 	private final AuthenticationManager authenticationManager;
@@ -51,6 +56,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	private final UserDao userDao;
 
 	private final JwtUtil jwtUtil;
+
+	private final UserIndexService userIndexService;
+
+	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -78,22 +87,25 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	@CachePut(value = "user", key = "#userDto.userId")
-	public String addNewUser(UserDto userDto) {
+	public UserDto addNewUser(UserDto userDto) {
+		System.out.println("=========== Inside the method ==============");
 		if (Objects.nonNull(userDto)) {
-			return userDao.addNewUser(UserDto.convertToUserEntity(userDto));
+			UserEntity userEntity = userDao.addNewUser(UserDataUtil.convertToUserEntity(userDto));
+			userIndexService.save(UserIndex.convertFromUserEntity(userEntity));
+			return UserDataUtil.convertToUserDto(userEntity);
 		}
-		System.out.println("Error in Addition of new record - Empty Record Can't be Added");
-		return "Record not Added";
+		logger.error("Error in Addition of new record - Empty Record Can't be Added");
+		return null;
 	}
 
 	@Override
-	@Cacheable("user")
 	public List<UserDto> getAllUsers() {
+		System.out.println("=========== Inside the method ==============");
 		List<UserEntity> userEntityList = userDao.getAllUsers();
 		if (CollectionUtils.isEmpty(userEntityList)) {
 			return new ArrayList<>();
 		} else {
-			return userEntityList.stream().map(currentUserEntity -> UserDto.convertToUserDto(currentUserEntity))
+			return userEntityList.stream().map(currentUserEntity -> UserDataUtil.convertToUserDto(currentUserEntity))
 					.collect(Collectors.toList());
 		}
 	}
@@ -101,10 +113,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Override
 	@Cacheable(value = "user", key = "#userId")
 	public UserDto getUserById(long userId) {
+		System.out.println("=========== Inside the method ==============");
 		Optional<UserEntity> optionalUserEntity = userDao.getUserById(userId);
 		if (optionalUserEntity.isPresent() && !optionalUserEntity.isEmpty()) {
 			UserEntity userEntity = optionalUserEntity.get();
-			return UserDto.convertToUserDto(userEntity);
+			return UserDataUtil.convertToUserDto(userEntity);
 		} else {
 			return new UserDto();
 		}
@@ -113,29 +126,33 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Override
 	@Cacheable(value = "role", key = "#roleId")
 	public List<UserDto> getUserByRoleId(long roleId) {
+		System.out.println("=========== Inside the method ==============");
 		List<UserEntity> userEntityList = userDao.getAllUsers();
 		if (CollectionUtils.isEmpty(userEntityList)) {
 			return new ArrayList<>();
 		} else {
 			return userEntityList.stream().filter(userEntity -> userEntity.getRoleEntity().getRoleId() == roleId)
-					.map(currentUserEntity -> UserDto.convertToUserDto(currentUserEntity)).collect(Collectors.toList());
+					.map(currentUserEntity -> UserDataUtil.convertToUserDto(currentUserEntity))
+					.collect(Collectors.toList());
 		}
 	}
 
 	@Override
 	@CacheEvict(value = "user", key = "#userId")
 	public String deleteById(long userId) {
+		System.out.println("=========== Inside the method ==============");
 		return userDao.deleteById(userId);
 	}
 
 	@Override
 	@CachePut(value = "user", key = "#userDto.userId")
-	public String updateUser(UserDto userDto) {
+	public UserDto updateUser(UserDto userDto) {
+		System.out.println("=========== Inside the method ==============");
 		if (Objects.nonNull(userDto)) {
-			return userDao.updateUser(UserDto.convertToUserEntity(userDto));
+			return UserDataUtil.convertToUserDto(userDao.updateUser(UserDataUtil.convertToUserEntity(userDto)));
 		}
-		System.out.println("Error in Updation of the record - Empty Record Can't be Updated");
-		return "Record not Updated";
+		logger.error("Error in Updation of the record - Empty Record Can't be Updated");
+		return null;
 	}
 
 }

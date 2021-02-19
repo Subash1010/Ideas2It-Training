@@ -6,6 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.I2I.healthCare.Models.RoleEntity;
@@ -17,26 +20,35 @@ public class RoleDaoImpl implements RoleDao {
 	@PersistenceContext
 	private EntityManager entityManger;
 
+	Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
+
 	@Override
 	public String addNewRole(RoleEntity roleEntity) {
 		try {
 			entityManger.persist(roleEntity);
 		} catch (Exception exception) {
-			System.out.println("Error in Addition of new record" + exception);
+			logger.error("Error in Addition of new record" + exception);
 			return "Record not Added";
 		}
 		return "Record Added Successfully!!!";
 	}
 
 	@Override
-	public String updateRole(RoleEntity roleEntity) {
+	public RoleEntity updateRole(RoleEntity roleEntity) {
 		try {
-			entityManger.merge(roleEntity);
+			RoleEntity existingRoleEntity = getRoleById(roleEntity.getRoleId());
+			if (Objects.nonNull(existingRoleEntity)) {
+				existingRoleEntity.setRoleId(roleEntity.getRoleId());
+				existingRoleEntity.setRoleName(roleEntity.getRoleName());
+				return entityManger.merge(roleEntity);
+			} else {
+				logger.error("No Record is found for Updation");
+				return null;
+			}
 		} catch (Exception exception) {
-			System.out.println("Error in Updation of the record" + exception);
-			return "Record not Updated";
+			logger.error("Error in Updation of the record" + exception);
+			return null;
 		}
-		return "Record Updated Successfully!!!";
 	}
 
 	@Override
@@ -46,14 +58,14 @@ public class RoleDaoImpl implements RoleDao {
 			if (Objects.nonNull(existingRole)) {
 				entityManger.remove(existingRole);
 			} else {
-				return "Record not found for Deletion";
+				return "Record with Role Id " + roleId + " is not found for Deletion";
 			}
 		} catch (Exception exception) {
-			System.out.println("Error in Deletion of the record" + exception);
-			return "Record not Deleted";
+			logger.error("Error in Deletion of the record with Role Id " + roleId + StringUtils.EMPTY + exception);
+			return "Record with Role Id  " + roleId + "is not Deleted";
 		}
 
-		return "Record Deleted Successfully!!!";
+		return "Record with Role Id " + roleId + " Deleted Successfully!!!";
 	}
 
 	@Override
@@ -62,7 +74,7 @@ public class RoleDaoImpl implements RoleDao {
 			RoleEntity response = (RoleEntity) entityManger.find(RoleEntity.class, roleId);
 			return Objects.nonNull(response) ? response : null;
 		} catch (Exception exception) {
-			System.out.println("Error in Fetching of the record" + exception);
+			logger.error("Error in Fetching of the record with Role Id " + roleId + StringUtils.EMPTY + exception);
 		}
 		return null;
 	}

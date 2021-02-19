@@ -13,7 +13,7 @@ public interface UserService {
 
 	String extractJWT(AuthenticationRequest userAuthenticateRequest) throws Exception;
 
-	String addNewUser(UserDto userDto);
+	UserDto addNewUser(UserDto userDto);
 
 	List<UserDto> getAllUsers();
 
@@ -23,6 +23,6 @@ public interface UserService {
 
 	String deleteById(long userId);
 
-	String updateUser(UserDto userDto);
+	UserDto updateUser(UserDto userDto);
 
 }

@@ -26,7 +26,7 @@ import com.I2I.healthCare.Service.PatientService;
  *
  */
 @RestController
-@RequestMapping("/patient")
+@RequestMapping("/patients")
 public class PatientController {
 
 	@Lazy
@@ -84,12 +84,13 @@ public class PatientController {
 	 * getAllPatientsByName method is used to return all the details of the Patients
 	 * by Name.
 	 * 
-	 * @param patientDto
+	 * @param firstName
+	 * @param lastName
 	 * @return List of Patients
 	 */
-	@GetMapping("/getAllPatientsByName")
-	public List<PatientDto> getAllPatientsByName(@RequestBody PatientDto patientDto) {
-		return patientService.getAllPatientsByName(patientDto.getFirstName(), patientDto.getLastName());
+	@GetMapping("/{firstName}/{lastName}")
+	public List<PatientDto> getAllPatientsByName(@PathVariable String firstName, @PathVariable String lastName) {
+		return patientService.getAllPatientsByName(firstName, lastName);
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class PatientController {
 	 * @param patientDto
 	 * @return String
 	 */
-	@PutMapping("/{pId}")
+	@PutMapping("/")
 	public String updatePatientDetails(@RequestBody PatientDto patientDto) {
 		return patientService.updatePatientDetails(patientDto);
 	}

@@ -7,7 +7,7 @@ import com.I2I.healthCare.Models.UserEntity;
 
 public interface UserDao {
 
-	String addNewUser(UserEntity userEntity);
+	UserEntity addNewUser(UserEntity userEntity);
 
 	List<UserEntity> getAllUsers();
 
@@ -15,6 +15,6 @@ public interface UserDao {
 
 	String deleteById(long userId);
 
-	String updateUser(UserEntity userEntity);
+	UserEntity updateUser(UserEntity userEntity);
 
 }

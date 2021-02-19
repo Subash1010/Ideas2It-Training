@@ -1,6 +1,7 @@
 package com.I2I.healthCare.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,27 +23,17 @@ import com.I2I.healthCare.Service.RoleService;
  *
  */
 @RestController
+@RefreshScope
 @RequestMapping("/role")
 public class RoleController {
 
 	@Lazy
 	@Autowired
 	public RoleController(RoleService roleService) {
-		super();
 		this.roleService = roleService;
 	}
 
 	private final RoleService roleService;
-
-	/**
-	 * home method is used to check if controller is reachable.
-	 * 
-	 * @return String
-	 */
-	@RequestMapping({ "/home" })
-	public String home() {
-		return "This is Role Page";
-	}
 
 	/**
 	 * addRole method is used to register new Role.
@@ -78,13 +69,13 @@ public class RoleController {
 	}
 
 	/**
-	 * updateUser method is used to updated the already existing Role details.
+	 * updateRole method is used to updated the already existing Role details.
 	 * 
 	 * @param roleDto
 	 * @return String
 	 */
 	@PutMapping("/")
-	public String updateUser(@RequestBody RoleDto roleDto) {
+	public RoleDto updateRole(@RequestBody RoleDto roleDto) {
 		return roleService.updateRole(roleDto);
 	}
 

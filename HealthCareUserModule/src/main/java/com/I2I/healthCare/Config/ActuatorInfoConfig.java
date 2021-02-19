@@ -17,7 +17,6 @@ public class ActuatorInfoConfig implements InfoContributor {
 	@Lazy
 	@Autowired
 	public ActuatorInfoConfig(UserRepository userRepository) {
-		super();
 		this.userRepository = userRepository;
 	}
 

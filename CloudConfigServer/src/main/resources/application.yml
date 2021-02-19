@@ -1,7 +1,12 @@
 server:
   port: 8888
 spring:
+  kafka:
+    bootstrap-servers:
+    - http://localhost:9092
   cloud:
+    bus:
+      enabled: true
     config:
       server:
         git:
@@ -15,4 +20,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: refresh, bus-refresh, beans, env

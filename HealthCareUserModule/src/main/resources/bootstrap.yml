@@ -10,3 +10,21 @@ spring:
   application:
     name: HealthCareUserModule
   profiles:    active:    - dev
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, bus-refresh, beans, env
+  security:
+    enabled: false
+zuul:
+  ignored-patterns: /actuator/**
+  routes:
+    patients:
+      path: /patients/**
+      service-id: HealthCarePatientModule
+      strip-prefix: false
+    vitalsign:
+      path: /vitalsign/**
+      service-id: HealthCareVitalSignModule
+      strip-prefix: false
