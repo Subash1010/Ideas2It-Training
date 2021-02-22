@@ -6,7 +6,7 @@ elasticsearch:
   port: 9300
 logging:
   file:
-    path: C:/Users/Windows/Documents/Logs/UserLogs/temps001
+    path: C:/Users/Windows/Documents/Logs/UserLogs/temp
 management:
   security:
     enabled: false
@@ -31,6 +31,3 @@ endpoints:
           enabled: true
       env:
         enabled: true
-message:
-  default:
-    name: Subash S...
