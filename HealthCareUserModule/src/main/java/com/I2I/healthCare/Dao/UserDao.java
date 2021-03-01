@@ -1,7 +1,6 @@
 package com.I2I.healthCare.Dao;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.I2I.healthCare.Models.UserEntity;
 
@@ -11,7 +10,7 @@ public interface UserDao {
 
 	List<UserEntity> getAllUsers();
 
-	Optional<UserEntity> getUserById(long userId);
+	UserEntity getUserById(long userId);
 
 	String deleteById(long userId);
 

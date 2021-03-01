@@ -23,23 +23,27 @@ public class PatientServiceImpl implements PatientService {
 
 	@Lazy
 	@Autowired
-	public PatientServiceImpl(PatientDao patientDao) {
-		super();
+	public PatientServiceImpl(PatientDao patientDao, PatientIndexService patientIndexService) {
 		this.patientDao = patientDao;
+		this.patientIndexService = patientIndexService;
 	}
 
 	private final PatientDao patientDao;
 
+	private final PatientIndexService patientIndexService;
+
 	Logger logger = LoggerFactory.getLogger(PatientServiceImpl.class);
 
 	@Override
-	public String addPatient(PatientDto patientDto) {
+	public PatientDto addPatient(PatientDto patientDto) {
 		if (Objects.nonNull(patientDto)) {
 			PatientEntity patientEntity = PatientDataUtil.convertToPatientEntity(patientDto);
-			return patientDao.addPatient(patientEntity);
+			PatientEntity updatedPatientEntity = patientDao.addPatient(patientEntity);
+			patientIndexService.save(PatientDataUtil.convertToPatientIndex(updatedPatientEntity));
+			return PatientDataUtil.convertToPatientDto(updatedPatientEntity);
 		}
 		logger.error("Error in Addition of new record - Empty Record Can't be Added");
-		return "Record not Added";
+		return null;
 	}
 
 	@Override

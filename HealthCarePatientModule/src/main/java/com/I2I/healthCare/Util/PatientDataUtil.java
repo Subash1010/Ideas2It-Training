@@ -1,6 +1,7 @@
 package com.I2I.healthCare.Util;
 
 import com.I2I.healthCare.Dto.PatientDto;
+import com.I2I.healthCare.Index.PatientIndex;
 import com.I2I.healthCare.Models.PatientEntity;
 
 public class PatientDataUtil {
@@ -55,5 +56,28 @@ public class PatientDataUtil {
 		patientEntity.setUpdatedAt(patientDto.getUpdatedAt());
 
 		return patientEntity;
+	}
+
+	public static PatientIndex convertToPatientIndex(PatientEntity patientEntity) {
+		if (patientEntity == null) {
+			return null;
+		}
+		PatientIndex patientIndex = new PatientIndex();
+		patientIndex.setPatientId(patientEntity.getPatientId());
+		patientIndex.setFirstName(patientEntity.getFirstName());
+		patientIndex.setLastName(patientEntity.getLastName());
+		patientIndex.setDob(patientEntity.getDob());
+		patientIndex.setAge(patientEntity.getAge());
+		patientIndex.setPhoneNumber(patientEntity.getPhoneNumber());
+		patientIndex.setAlternatePhoneNumber(patientEntity.getAlternatePhoneNumber());
+		patientIndex.setGender(patientEntity.getGender());
+		patientIndex.setPermanentAddress(patientEntity.getPermanentAddress());
+		patientIndex.setCommunicationAddress(patientEntity.getCommunicationAddress());
+		patientIndex.setEmail(patientEntity.getEmail());
+		patientIndex.setInitialAdmitDate(patientEntity.getInitialAdmitDate());
+		patientIndex.setLatestAdmitDate(patientEntity.getLatestAdmitDate());
+
+		return patientIndex;
+
 	}
 }

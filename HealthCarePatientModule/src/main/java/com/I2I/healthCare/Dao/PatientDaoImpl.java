@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,13 @@ public class PatientDaoImpl implements PatientDao {
 	Logger logger = LoggerFactory.getLogger(PatientDaoImpl.class);
 
 	@Override
-	public String addPatient(PatientEntity patientEntity) {
+	public PatientEntity addPatient(PatientEntity patientEntity) {
 		try {
-			patientRepository.save(patientEntity);
+			return patientRepository.save(patientEntity);
 		} catch (Exception exception) {
 			logger.error("Error in insertion of new record" + exception);
-			return "Record not Inserted";
+			return null;
 		}
-		return "Added new record Successfully!!!";
 	}
 
 	@Override
@@ -67,12 +67,18 @@ public class PatientDaoImpl implements PatientDao {
 	@Override
 	public String deletePatientDetails(long pId) {
 		try {
-			patientRepository.deleteById(pId);
+			Optional<PatientEntity> existingRecord = getPatientDetailsById(pId);
+			if (existingRecord.isPresent() && !existingRecord.isEmpty()) {
+				patientRepository.deleteById(pId);
+			} else {
+				return "Record with Patient Id " + pId + " is not found for Deletion";
+			}
 		} catch (Exception exception) {
-			logger.error("Error in Deletion of the record" + exception);
-			return "Record not Deleted";
+			logger.error("Error in Deletion of the record with Patient Id " + pId + StringUtils.EMPTY + exception);
+			return "Record with Patient Id  " + pId + "is not Deleted";
 		}
-		return "Record Deleted Successfully!!!";
+
+		return "Record with Patient Id " + pId + " Deleted Successfully!!!";
 	}
 
 	@Override

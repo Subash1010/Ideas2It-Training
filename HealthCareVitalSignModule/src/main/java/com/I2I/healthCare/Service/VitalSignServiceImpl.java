@@ -34,13 +34,13 @@ public class VitalSignServiceImpl implements VitalSignService {
 	Logger logger = LoggerFactory.getLogger(VitalSignServiceImpl.class);
 
 	@Override
-	public String addCheckupDetails(VitalSignDto vitalSignDto) {
+	public VitalSignDto addCheckupDetails(VitalSignDto vitalSignDto) {
 		if (Objects.nonNull(vitalSignDto)) {
 			VitalSignEntity vitalSignEntity = VitalSignDataUtil.convertToVitalSignEntity(vitalSignDto);
-			return vitalSignDao.addPatient(vitalSignEntity);
+			return VitalSignDataUtil.convertToVitalSignDto(vitalSignDao.addPatient(vitalSignEntity));
 		}
 		logger.error("Error in Addition of new record - Empty Record Can't be Added");
-		return "Record not Added";
+		return null;
 	}
 
 	@Override
@@ -49,13 +49,14 @@ public class VitalSignServiceImpl implements VitalSignService {
 	}
 
 	@Override
-	public String updateVitalSign(long pId, Date checkUpDate, VitalSignDto vitalSignDto) {
+	public VitalSignDto updateVitalSign(long pId, Date checkUpDate, VitalSignDto vitalSignDto) {
 		if (Objects.nonNull(vitalSignDto)) {
 			VitalSignEntity vitalSignEntity = VitalSignDataUtil.convertToVitalSignEntity(vitalSignDto);
-			return vitalSignDao.updateVitalSign(pId, checkUpDate, vitalSignEntity);
+			return VitalSignDataUtil
+					.convertToVitalSignDto(vitalSignDao.updateVitalSign(pId, checkUpDate, vitalSignEntity));
 		}
 		logger.error("Error in Updation of the record - Empty Record Can't be Updated");
-		return "Record not Updated";
+		return null;
 	}
 
 	@Override

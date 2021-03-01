@@ -5,8 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import com.uber.jaeger.Configuration;
+import com.uber.jaeger.samplers.ProbabilisticSampler;
+
+import io.opentracing.Tracer;
 
 @SpringBootApplication
 @EnableJpaRepositories
@@ -20,4 +26,9 @@ public class HealthCareUserModuleApplication {
 		SpringApplication.run(HealthCareUserModuleApplication.class, args);
 	}
 
+	@Bean
+	public Tracer jaegerTracer() {
+		return new Configuration("User Module", new Configuration.SamplerConfiguration(ProbabilisticSampler.TYPE, 1),
+				new Configuration.ReporterConfiguration()).getTracer();
+	}
 }

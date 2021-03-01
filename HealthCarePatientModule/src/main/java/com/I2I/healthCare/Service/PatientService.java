@@ -6,7 +6,7 @@ import com.I2I.healthCare.Dto.PatientDto;
 
 public interface PatientService {
 
-	String addPatient(PatientDto patientDto);
+	PatientDto addPatient(PatientDto patientDto);
 
 	List<String> getAllPatientsName();
 

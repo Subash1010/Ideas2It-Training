@@ -2,7 +2,6 @@ package com.I2I.healthCare.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,6 @@ import com.I2I.healthCare.Service.UserService;
 @RequestMapping("/authenticate")
 public class AuthenticationController {
 
-	@Lazy
 	@Autowired
 	public AuthenticationController(UserService userService) {
 		this.userService = userService;

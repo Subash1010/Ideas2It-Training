@@ -18,6 +18,8 @@ import com.I2I.healthCare.Dto.PatientDto;
 import com.I2I.healthCare.Dto.VitalSignDto;
 import com.I2I.healthCare.Service.VitalSignService;
 
+import io.swagger.annotations.ApiOperation;
+
 /**
  * VitalSignController works as End point for Vital Sign module to perform CRUD
  * operations.
@@ -40,23 +42,14 @@ public class VitalSignController {
 	private final VitalSignService vitalSignService;
 
 	/**
-	 * home method is used to check if controller is reachable.
-	 * 
-	 * @return String
-	 */
-	@RequestMapping({ "/home" })
-	public String hello() {
-		return "This is Vital Sign Page";
-	}
-
-	/**
 	 * addCheckupDetails method is used to register new check up Details.
 	 * 
 	 * @param vitalSignDto
 	 * @return String
 	 */
 	@PostMapping("/")
-	public String addCheckupDetails(@RequestBody VitalSignDto vitalSignDto) {
+	@ApiOperation(value = "Insert New Vital Sign Detail of the Patient", response = VitalSignDto.class)
+	public VitalSignDto addCheckupDetails(@RequestBody VitalSignDto vitalSignDto) {
 		return vitalSignService.addCheckupDetails(vitalSignDto);
 	}
 
@@ -69,6 +62,7 @@ public class VitalSignController {
 	 * @return VitalSignDto
 	 */
 	@GetMapping("/{pId}/{date}")
+	@ApiOperation(value = "Fetch CheckUp Details of the Patient by passing Patient Id and CheckUp date", response = VitalSignDto.class)
 	public VitalSignDto getCheckupDetails(@PathVariable long pId,
 			@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 		return vitalSignService.getCheckupDetails(pId, date);
@@ -82,6 +76,7 @@ public class VitalSignController {
 	 * @return PatientDto
 	 */
 	@GetMapping("/{pId}")
+	@ApiOperation(value = "Fetch Details of the Patient by passing Patient Id", response = PatientDto.class)
 	public PatientDto getPatientDetails(@PathVariable long pId) {
 		return vitalSignService.getPatientDetails(pId);
 	}
@@ -96,7 +91,8 @@ public class VitalSignController {
 	 * @return String
 	 */
 	@PutMapping("/{pId}/{date}")
-	public String updateVitalSigns(@PathVariable long pId,
+	@ApiOperation(value = "Update CheckUp Details of the Patient by passing Patient Id and CheckUp date", response = VitalSignDto.class)
+	public VitalSignDto updateVitalSigns(@PathVariable long pId,
 			@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
 			@RequestBody VitalSignDto vitalSignDto) {
 		return vitalSignService.updateVitalSign(pId, date, vitalSignDto);
@@ -111,6 +107,7 @@ public class VitalSignController {
 	 * @return String
 	 */
 	@DeleteMapping("/{pId}/{date}")
+	@ApiOperation(value = "Delete CheckUp Details of the Patient by passing Patient Id and CheckUp date", response = String.class)
 	public String deleteCheckup(@PathVariable long pId,
 			@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 		return vitalSignService.deleteCheckup(pId, date);

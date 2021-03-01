@@ -7,7 +7,7 @@ import com.I2I.healthCare.Models.PatientEntity;
 
 public interface PatientDao {
 
-	String addPatient(PatientEntity patientEntity);
+	PatientEntity addPatient(PatientEntity patientEntity);
 
 	List<PatientEntity> getAllPatientsName();
 

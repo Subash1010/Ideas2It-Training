@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
+import com.I2I.healthCare.Advice.AuditTrailLogging;
 import com.I2I.healthCare.Models.UserEntity;
 import com.I2I.healthCare.Repository.UserRepository;
 
@@ -46,17 +47,23 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public Optional<UserEntity> getUserById(long userId) {
-		return userRepository.findById(userId);
+	public UserEntity getUserById(long userId) {
+		Optional<UserEntity> optionalEntity = userRepository.findById(userId);
+		if (!optionalEntity.isEmpty() && optionalEntity.isPresent()) {
+			return optionalEntity.get();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public String deleteById(long userId) {
 		try {
-			Optional<UserEntity> optionalUserEntity = getUserById(userId);
-			if (optionalUserEntity.isPresent() && !optionalUserEntity.isEmpty()) {
+			UserEntity userEntity = getUserById(userId);
+			if (Objects.nonNull(userEntity)) {
 				userRepository.deleteById(userId);
 			} else {
+				logger.error("Record with User Id " + userId + " is not found for Deletion");
 				return "Record with User Id " + userId + " is not found for Deletion";
 			}
 		} catch (Exception exception) {
@@ -70,9 +77,9 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public UserEntity updateUser(UserEntity userEntity) {
 		try {
-			UserEntity existingUserEntity = getUserById(userEntity.getUserId()).orElse(null);
+			@AuditTrailLogging()
+			UserEntity existingUserEntity = getUserById(userEntity.getUserId());
 			if (Objects.nonNull(existingUserEntity)) {
-				existingUserEntity.setUserId(userEntity.getUserId());
 				existingUserEntity.setUserName(userEntity.getUserName());
 				existingUserEntity.setPassword(userEntity.getPassword());
 				existingUserEntity.setRoleEntity(userEntity.getRoleEntity());

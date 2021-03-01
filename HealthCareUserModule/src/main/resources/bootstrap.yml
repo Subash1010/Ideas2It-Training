@@ -7,21 +7,26 @@ spring:
         enabled: true
       uri: http://localhost:8200
       token: 00000000-0000-0000-0000-000000000000
+  datasource:
+    hikari:
+      minimumIdle: 1
+      maximumPoolSize: 20
+      idleTimeout: 30000
+      poolName: SpringBootJPAHikariCP
+      maxLifetime: 50000
+      connectionTimeout: 30000
   application:
     name: HealthCareUserModule
   profiles:    active:    - dev
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh, bus-refresh, beans, env
-  security:
-    enabled: false
 zuul:
   ignored-patterns: /actuator/**
   routes:
     patients:
       path: /patients/**
+      service-id: HealthCarePatientModule
+      strip-prefix: false
+    patientsearch:
+      path: /patientsearch/**
       service-id: HealthCarePatientModule
       strip-prefix: false
     vitalsign:

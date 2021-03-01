@@ -1,22 +1,24 @@
-package com.I2I.healthCare.Dto;
+package com.I2I.healthCare.Index;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Document(indexName = "patient_index", shards = 2)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientDto implements Serializable {
+public class PatientIndex implements Serializable {
 
-	private static final long serialVersionUID = -1082119060818889157L;
+	private static final long serialVersionUID = -6303297266361893838L;
 
-	@ApiModelProperty(notes = "Unique Id of the Patient", name = "patientId", required = true)
+	@Id
 	private long patientId;
 
 	private String firstName;
@@ -42,13 +44,5 @@ public class PatientDto implements Serializable {
 	private Date initialAdmitDate;
 
 	private Date latestAdmitDate;
-
-	private String createdBy;
-
-	private LocalDateTime createdAt;
-
-	private String updatedBy;
-
-	private LocalDateTime updatedAt;
 
 }

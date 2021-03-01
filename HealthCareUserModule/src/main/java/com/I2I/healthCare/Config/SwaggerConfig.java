@@ -18,7 +18,7 @@ public class SwaggerConfig {
 	@Bean
 	public Docket postsApi() {
 		return new Docket(DocumentationType.SWAGGER_2).groupName("User Module").apiInfo(apiInfo()).select()
-				.paths(regex("/user.*")).build();
+				.paths(regex("/users.*")).build();
 	}
 
 	private ApiInfo apiInfo() {

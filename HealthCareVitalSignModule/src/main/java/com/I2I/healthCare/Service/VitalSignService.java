@@ -7,11 +7,11 @@ import com.I2I.healthCare.Dto.VitalSignDto;
 
 public interface VitalSignService {
 
-	String addCheckupDetails(VitalSignDto vitalSignDto);
+	VitalSignDto addCheckupDetails(VitalSignDto vitalSignDto);
 
 	VitalSignDto getCheckupDetails(long pId, Date date);
 
-	String updateVitalSign(long pId, Date date, VitalSignDto vitalSignDto);
+	VitalSignDto updateVitalSign(long pId, Date date, VitalSignDto vitalSignDto);
 
 	String deleteCheckup(long pId, Date date);
 

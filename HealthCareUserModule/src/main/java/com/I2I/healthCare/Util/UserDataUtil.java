@@ -1,5 +1,9 @@
 package com.I2I.healthCare.Util;
 
+import java.util.Objects;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.I2I.healthCare.Dto.UserDto;
 import com.I2I.healthCare.Models.RoleEntity;
 import com.I2I.healthCare.Models.UserEntity;
@@ -13,8 +17,13 @@ public class UserDataUtil {
 		UserDto userDto = new UserDto();
 		userDto.setUserId(userEntity.getUserId());
 		userDto.setUserName(userEntity.getUserName());
-		userDto.setRoleId(userEntity.getRoleEntity().getRoleId());
-		userDto.setRoleName(userEntity.getRoleEntity().getRoleName());
+		if (Objects.nonNull(userEntity.getRoleEntity())) {
+			userDto.setRoleId(userEntity.getRoleEntity().getRoleId());
+			userDto.setRoleName(userEntity.getRoleEntity().getRoleName());
+		} else {
+			userDto.setRoleId(500);
+			userDto.setRoleName(StringUtils.EMPTY);
+		}
 		userDto.setCreatedAt(userEntity.getCreatedAt());
 		userDto.setCreatedBy(userEntity.getCreatedBy());
 		userDto.setUpdatedBy(userEntity.getUpdatedBy());

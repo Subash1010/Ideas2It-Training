@@ -55,7 +55,7 @@ public class PatientController {
 	 * @return String
 	 */
 	@PostMapping("/")
-	public String addNewPatient(@RequestBody PatientDto patientDto) {
+	public PatientDto addNewPatient(@RequestBody PatientDto patientDto) {
 		return patientService.addPatient(patientDto);
 	}
 

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
@@ -88,7 +87,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Override
 	@CachePut(value = "user", key = "#userDto.userId")
 	public UserDto addNewUser(UserDto userDto) {
-		System.out.println("=========== Inside the method ==============");
 		if (Objects.nonNull(userDto)) {
 			UserEntity userEntity = userDao.addNewUser(UserDataUtil.convertToUserEntity(userDto));
 			userIndexService.save(UserIndex.convertFromUserEntity(userEntity));
@@ -100,7 +98,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	public List<UserDto> getAllUsers() {
-		System.out.println("=========== Inside the method ==============");
 		List<UserEntity> userEntityList = userDao.getAllUsers();
 		if (CollectionUtils.isEmpty(userEntityList)) {
 			return new ArrayList<>();
@@ -111,12 +108,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	@Override
-	@Cacheable(value = "user", key = "#userId")
 	public UserDto getUserById(long userId) {
-		System.out.println("=========== Inside the method ==============");
-		Optional<UserEntity> optionalUserEntity = userDao.getUserById(userId);
-		if (optionalUserEntity.isPresent() && !optionalUserEntity.isEmpty()) {
-			UserEntity userEntity = optionalUserEntity.get();
+		UserEntity userEntity = userDao.getUserById(userId);
+		if (Objects.nonNull(userEntity)) {
 			return UserDataUtil.convertToUserDto(userEntity);
 		} else {
 			return new UserDto();
@@ -126,7 +120,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Override
 	@Cacheable(value = "role", key = "#roleId")
 	public List<UserDto> getUserByRoleId(long roleId) {
-		System.out.println("=========== Inside the method ==============");
 		List<UserEntity> userEntityList = userDao.getAllUsers();
 		if (CollectionUtils.isEmpty(userEntityList)) {
 			return new ArrayList<>();
@@ -138,16 +131,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	@Override
-	@CacheEvict(value = "user", key = "#userId")
 	public String deleteById(long userId) {
-		System.out.println("=========== Inside the method ==============");
 		return userDao.deleteById(userId);
 	}
 
 	@Override
-	@CachePut(value = "user", key = "#userDto.userId")
 	public UserDto updateUser(UserDto userDto) {
-		System.out.println("=========== Inside the method ==============");
 		if (Objects.nonNull(userDto)) {
 			return UserDataUtil.convertToUserDto(userDao.updateUser(UserDataUtil.convertToUserEntity(userDto)));
 		}

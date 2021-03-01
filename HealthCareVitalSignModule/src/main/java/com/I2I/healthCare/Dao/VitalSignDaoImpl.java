@@ -29,14 +29,13 @@ public class VitalSignDaoImpl implements VitalSignDao {
 	Logger logger = LoggerFactory.getLogger(VitalSignDaoImpl.class);
 
 	@Override
-	public String addPatient(VitalSignEntity vitalSignEntity) {
+	public VitalSignEntity addPatient(VitalSignEntity vitalSignEntity) {
 		try {
-			vitalSignRepository.save(vitalSignEntity);
+			return vitalSignRepository.save(vitalSignEntity);
 		} catch (Exception exception) {
 			logger.error("Error in insertion of new record" + exception);
-			return "Record not Inserted";
+			return null;
 		}
-		return "Added new record Successfully!!!";
 	}
 
 	@Override
@@ -50,19 +49,19 @@ public class VitalSignDaoImpl implements VitalSignDao {
 	}
 
 	@Override
-	public String updateVitalSign(long pId, Date checkUpDate, VitalSignEntity vitalSignEntity) {
+	public VitalSignEntity updateVitalSign(long pId, Date checkUpDate, VitalSignEntity vitalSignEntity) {
 		try {
 			VitalSignDto existingVitalSignDto = getCheckupDetails(pId, checkUpDate);
 			if (Objects.nonNull(existingVitalSignDto)) {
-				vitalSignRepository.save(vitalSignEntity);
+				return vitalSignRepository.save(vitalSignEntity);
 			} else {
-				return "No Record is found for Updation";
+				logger.error("No Record is found for Updation");
+				return null;
 			}
 		} catch (Exception exception) {
 			logger.error("Error in Updation of the record" + exception);
-			return "Record not Updated";
+			return null;
 		}
-		return "Record Updated Successfully!!!";
 	}
 
 	@Override
