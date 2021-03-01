@@ -15,7 +15,6 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: health, refresh, refresh-bus, beans, env
   security:
-    enabled: false
-    
+    enabled: false   
