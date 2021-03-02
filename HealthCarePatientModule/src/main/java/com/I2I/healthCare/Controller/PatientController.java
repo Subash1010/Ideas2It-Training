@@ -39,16 +39,6 @@ public class PatientController {
 	private final PatientService patientService;
 
 	/**
-	 * home method is used to check if controller is reachable.
-	 * 
-	 * @return String
-	 */
-	@RequestMapping({ "/home" })
-	public String home() {
-		return "This is Patient Page";
-	}
-
-	/**
 	 * addNewPatient method is used to register new Patients.
 	 * 
 	 * @param patientDto
@@ -60,13 +50,13 @@ public class PatientController {
 	}
 
 	/**
-	 * getAllPatientsName method is used to return all the Patients name.
+	 * getAllPatients method is used to return all the Patients.
 	 * 
-	 * @return List of patient name
+	 * @return List of patients
 	 */
 	@GetMapping("/")
-	public List<String> getAllPatientsName() {
-		return patientService.getAllPatientsName();
+	public List<PatientDto> getAllPatients() {
+		return patientService.getAllPatients();
 	}
 
 	/**

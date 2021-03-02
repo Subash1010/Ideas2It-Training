@@ -47,13 +47,12 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public List<String> getAllPatientsName() {
+	public List<PatientDto> getAllPatients() {
 		List<PatientEntity> patientEntityList = patientDao.getAllPatientsName();
 		if (CollectionUtils.isEmpty(patientEntityList)) {
 			return new ArrayList<>();
 		} else {
-			return patientEntityList.stream()
-					.map(patientEntity -> patientEntity.getFirstName() + "_" + patientEntity.getLastName())
+			return patientEntityList.stream().map(patientEntity -> PatientDataUtil.convertToPatientDto(patientEntity))
 					.collect(Collectors.toList());
 		}
 	}

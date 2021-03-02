@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -108,8 +109,8 @@ public class UserController {
 	@PutMapping("/")
 	@TrackExecutionTime
 	@AuditTrailLogging
-	public UserDto updateUser(@RequestBody UserDto userDto) {
-		return userService.updateUser(userDto);
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+		return ResponseEntity.ok(userService.updateUser(userDto));
 	}
 
 }

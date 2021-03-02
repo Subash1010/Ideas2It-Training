@@ -53,7 +53,19 @@ public class PatientDaoImpl implements PatientDao {
 		try {
 			PatientEntity existingPatientEntity = getPatientDetailsById(patientEntity.getPatientId()).orElse(null);
 			if (Objects.nonNull(existingPatientEntity)) {
-				patientRepository.save(patientEntity);
+				existingPatientEntity.setFirstName(patientEntity.getFirstName());
+				existingPatientEntity.setLastName(patientEntity.getLastName());
+				existingPatientEntity.setDob(patientEntity.getDob());
+				existingPatientEntity.setAge(patientEntity.getAge());
+				existingPatientEntity.setPhoneNumber(patientEntity.getPhoneNumber());
+				existingPatientEntity.setAlternatePhoneNumber(patientEntity.getAlternatePhoneNumber());
+				existingPatientEntity.setGender(patientEntity.getGender());
+				existingPatientEntity.setPermanentAddress(patientEntity.getPermanentAddress());
+				existingPatientEntity.setCommunicationAddress(patientEntity.getCommunicationAddress());
+				existingPatientEntity.setEmail(patientEntity.getEmail());
+				existingPatientEntity.setInitialAdmitDate(patientEntity.getInitialAdmitDate());
+				existingPatientEntity.setLatestAdmitDate(patientEntity.getLatestAdmitDate());
+				patientRepository.save(existingPatientEntity);
 			} else {
 				return "No Record is found for Updation";
 			}

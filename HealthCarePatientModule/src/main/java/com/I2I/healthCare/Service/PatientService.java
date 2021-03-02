@@ -8,7 +8,7 @@ public interface PatientService {
 
 	PatientDto addPatient(PatientDto patientDto);
 
-	List<String> getAllPatientsName();
+	List<PatientDto> getAllPatients();
 
 	PatientDto getPatientDetailsById(long pId);
 

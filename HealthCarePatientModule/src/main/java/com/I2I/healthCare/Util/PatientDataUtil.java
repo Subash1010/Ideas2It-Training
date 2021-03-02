@@ -50,10 +50,6 @@ public class PatientDataUtil {
 		patientEntity.setEmail(patientDto.getEmail());
 		patientEntity.setInitialAdmitDate(patientDto.getInitialAdmitDate());
 		patientEntity.setLatestAdmitDate(patientDto.getLatestAdmitDate());
-		patientEntity.setCreatedAt(patientDto.getCreatedAt());
-		patientEntity.setCreatedBy(patientDto.getCreatedBy());
-		patientEntity.setUpdatedBy(patientDto.getUpdatedBy());
-		patientEntity.setUpdatedAt(patientDto.getUpdatedAt());
 
 		return patientEntity;
 	}

@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +33,7 @@ import lombok.NoArgsConstructor;
 @NamedQueries(value = {
 		@NamedQuery(name = "PatientEntity.getAllPatientsNameByAge", query = "Select CONCAT(p.firstName, '_', p.lastName) From PatientEntity as p Where p.age = ?1 order by p.firstName"),
 		@NamedQuery(name = "PatientEntity.getPatientInfoByName", query = "Select p From PatientEntity as p Where p.firstName = ?1 And p.lastName = ?2  order by p.firstName") })
+@EntityListeners(AuditingEntityListener.class)
 public class PatientEntity implements Serializable {
 
 	private static final long serialVersionUID = -1660387656600048948L;
