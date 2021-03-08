@@ -49,7 +49,7 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public String updatePatientDetails(PatientEntity patientEntity) {
+	public PatientEntity updatePatientDetails(PatientEntity patientEntity) {
 		try {
 			PatientEntity existingPatientEntity = getPatientDetailsById(patientEntity.getPatientId()).orElse(null);
 			if (Objects.nonNull(existingPatientEntity)) {
@@ -65,15 +65,15 @@ public class PatientDaoImpl implements PatientDao {
 				existingPatientEntity.setEmail(patientEntity.getEmail());
 				existingPatientEntity.setInitialAdmitDate(patientEntity.getInitialAdmitDate());
 				existingPatientEntity.setLatestAdmitDate(patientEntity.getLatestAdmitDate());
-				patientRepository.save(existingPatientEntity);
+				return patientRepository.save(existingPatientEntity);
 			} else {
-				return "No Record is found for Updation";
+				logger.error("No Record is found for Updation");
+				return null;
 			}
 		} catch (Exception exception) {
 			logger.error("Error in Updation of the record" + exception);
-			return "Record not Updated";
+			return null;
 		}
-		return "Record Updated Successfully!!!";
 	}
 
 	@Override

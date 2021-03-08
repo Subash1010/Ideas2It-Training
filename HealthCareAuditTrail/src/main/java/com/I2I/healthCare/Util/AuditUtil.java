@@ -15,7 +15,7 @@ public class AuditUtil {
 		kafkaAuditEntity.setServiceName(auditDto.getServiceName());
 		kafkaAuditEntity.setMethodName(auditDto.getMethodName());
 		kafkaAuditEntity.setRequest(auditDto.getRequest());
-		kafkaAuditEntity.setBeforeValue(auditDto.getBeforeValue());
+		kafkaAuditEntity.setData(auditDto.getData());
 		kafkaAuditEntity.setAction(auditDto.getAction());
 		kafkaAuditEntity.setLogDate(auditDto.getLogDate());
 		kafkaAuditEntity.setLogTime(auditDto.getLogTime());
@@ -32,7 +32,7 @@ public class AuditUtil {
 		rabbitAuditEntity.setServiceName(auditDto.getServiceName());
 		rabbitAuditEntity.setMethodName(auditDto.getMethodName());
 		rabbitAuditEntity.setRequest(auditDto.getRequest());
-		rabbitAuditEntity.setBeforeValue(auditDto.getBeforeValue());
+		rabbitAuditEntity.setData(auditDto.getData());
 		rabbitAuditEntity.setAction(auditDto.getAction());
 		rabbitAuditEntity.setLogDate(auditDto.getLogDate());
 		rabbitAuditEntity.setLogTime(auditDto.getLogTime());

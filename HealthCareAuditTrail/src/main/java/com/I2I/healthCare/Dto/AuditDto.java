@@ -21,7 +21,7 @@ public class AuditDto implements Serializable {
 
 	private String request;
 
-	private String beforeValue;
+	private DataDto data;
 
 	private String action;
 

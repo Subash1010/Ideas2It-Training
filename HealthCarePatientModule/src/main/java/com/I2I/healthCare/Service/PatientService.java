@@ -12,7 +12,7 @@ public interface PatientService {
 
 	PatientDto getPatientDetailsById(long pId);
 
-	String updatePatientDetails(PatientDto patientDto);
+	PatientDto updatePatientDetails(PatientDto patientDto);
 
 	String deletePatientDetails(long pId);
 

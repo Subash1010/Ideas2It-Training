@@ -8,12 +8,12 @@ public interface UserDao {
 
 	UserEntity addNewUser(UserEntity userEntity);
 
-	List<UserEntity> getAllUsers();
-
 	UserEntity getUserById(long userId);
 
 	String deleteById(long userId);
 
 	UserEntity updateUser(UserEntity userEntity);
+
+	List<UserEntity> getAllUsers(int offset, int limit);
 
 }

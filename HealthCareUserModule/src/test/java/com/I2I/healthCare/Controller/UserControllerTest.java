@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.I2I.healthCare.HealthCareUserModuleApplication;
@@ -100,7 +99,7 @@ public class UserControllerTest {
 		Optional<UserEntity> optionalEntity = Optional.of(userEntity);
 		when(userRepository.findById(userDto.getUserId())).thenReturn(optionalEntity);
 		when(userRepository.save(userEntity)).thenReturn(userEntity);
-		ResponseEntity<UserDto> userDtoResponse = userController.updateUser(userDto);
+		UserDto userDtoResponse = userController.updateUser(userDto);
 		assertThat(userDtoResponse).isNotNull();
 		assertEquals(userDtoResponse, userDto);
 	}
@@ -110,7 +109,7 @@ public class UserControllerTest {
 		UserDto userDto = UserDataPrototype.getUserDto();
 		Optional<UserEntity> optionalEntity = Optional.of(new UserEntity());
 		when(userRepository.findById(userDto.getUserId())).thenReturn(optionalEntity);
-		ResponseEntity<UserDto> userDtoResponse = userController.updateUser(userDto);
+		UserDto userDtoResponse = userController.updateUser(userDto);
 		assertThat(userDtoResponse).isNull();
 		assertEquals(userDtoResponse, null);
 	}

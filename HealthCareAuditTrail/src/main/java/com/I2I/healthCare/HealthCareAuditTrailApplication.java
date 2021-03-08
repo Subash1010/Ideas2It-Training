@@ -50,8 +50,9 @@ public class HealthCareAuditTrailApplication {
 	}
 
 	private void setAction(AuditDto auditDto) {
-		String action = auditService.findAction(auditDto.getMethodName(), auditDto.getRequest(),
-				auditDto.getBeforeValue());
+		String action = auditService.findAction(auditDto.getMethodName(), auditDto.getRequest());
+		String request = auditService.findRequestType(auditDto.getMethodName());
+		auditDto.setRequest(request);
 		auditDto.setAction(action);
 	}
 

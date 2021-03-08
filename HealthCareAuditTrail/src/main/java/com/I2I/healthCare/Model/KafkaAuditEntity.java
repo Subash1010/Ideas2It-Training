@@ -2,7 +2,10 @@ package com.I2I.healthCare.Model;
 
 import java.io.Serializable;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.I2I.healthCare.Dto.DataDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +19,9 @@ public class KafkaAuditEntity implements Serializable {
 
 	private static final long serialVersionUID = -3838469704956797352L;
 
+	@Id
+	private String id;
+
 	private String userName;
 
 	private String serviceName;
@@ -24,7 +30,7 @@ public class KafkaAuditEntity implements Serializable {
 
 	private String request;
 
-	private String beforeValue;
+	private DataDto data;
 
 	private String action;
 

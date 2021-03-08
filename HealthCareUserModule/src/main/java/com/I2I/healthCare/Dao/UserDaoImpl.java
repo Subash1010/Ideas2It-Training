@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.I2I.healthCare.Advice.AuditTrailLogging;
@@ -37,13 +38,15 @@ public class UserDaoImpl implements UserDao {
 			logger.error("Error in insertion of new record" + exception);
 			return savedUserEntity;
 		}
-		logger.info("Added new record Successfully!!!");
+		logger.info("Added new record Successfully!!! UserId is " + savedUserEntity.getUserId());
 		return savedUserEntity;
 	}
 
 	@Override
-	public List<UserEntity> getAllUsers() {
-		return userRepository.findAll();
+	public List<UserEntity> getAllUsers(int limit, int offset) {
+		Pageable pageable = new OffsetBasedPageRequest(limit, offset);
+		return userRepository.findAll(pageable).getContent();
+
 	}
 
 	@Override
@@ -83,6 +86,7 @@ public class UserDaoImpl implements UserDao {
 				existingUserEntity.setUserName(userEntity.getUserName());
 				existingUserEntity.setPassword(userEntity.getPassword());
 				existingUserEntity.setRoleEntity(userEntity.getRoleEntity());
+				logger.info("User Record with ID " + existingUserEntity.getUserId() + " is Updated");
 				return userRepository.save(existingUserEntity);
 			} else {
 				logger.error("No Record is found for Updation");

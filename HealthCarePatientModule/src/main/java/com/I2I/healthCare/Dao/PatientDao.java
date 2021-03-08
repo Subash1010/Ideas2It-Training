@@ -13,7 +13,7 @@ public interface PatientDao {
 
 	Optional<PatientEntity> getPatientDetailsById(long pId);
 
-	String updatePatientDetails(PatientEntity patientEntity);
+	PatientEntity updatePatientDetails(PatientEntity patientEntity);
 
 	String deletePatientDetails(long pId);
 

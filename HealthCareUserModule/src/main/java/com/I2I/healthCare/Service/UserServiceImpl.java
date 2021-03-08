@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					userAuthenticateRequest.getUserName(), userAuthenticateRequest.getPassword()));
 		} catch (BadCredentialsException exception) {
-			throw new Exception("Incorrect UserName or Password", exception);
+			logger.error("Incorrect UserName or Password", exception);
+			return StringUtils.EMPTY;
 		}
 
 		final UserDetails userDetails = loadUserByUsername(userAuthenticateRequest.getUserName());
@@ -97,8 +99,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	@Override
-	public List<UserDto> getAllUsers() {
-		List<UserEntity> userEntityList = userDao.getAllUsers();
+	public List<UserDto> getAllUsers(int limit, int offset) {
+		List<UserEntity> userEntityList = userDao.getAllUsers(limit, offset);
 		if (CollectionUtils.isEmpty(userEntityList)) {
 			return new ArrayList<>();
 		} else {
@@ -113,14 +115,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		if (Objects.nonNull(userEntity)) {
 			return UserDataUtil.convertToUserDto(userEntity);
 		} else {
-			return new UserDto();
+			return null;
 		}
 	}
 
 	@Override
 	@Cacheable(value = "role", key = "#roleId")
 	public List<UserDto> getUserByRoleId(long roleId) {
-		List<UserEntity> userEntityList = userDao.getAllUsers();
+		int limit = 100;
+		int offset = 0;
+		List<UserEntity> userEntityList = userDao.getAllUsers(limit, offset);
 		if (CollectionUtils.isEmpty(userEntityList)) {
 			return new ArrayList<>();
 		} else {

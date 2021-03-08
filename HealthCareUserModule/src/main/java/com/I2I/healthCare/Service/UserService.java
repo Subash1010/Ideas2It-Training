@@ -15,8 +15,6 @@ public interface UserService {
 
 	UserDto addNewUser(UserDto userDto);
 
-	List<UserDto> getAllUsers();
-
 	UserDto getUserById(long userId);
 
 	List<UserDto> getUserByRoleId(long roleId);
@@ -24,5 +22,7 @@ public interface UserService {
 	String deleteById(long userId);
 
 	UserDto updateUser(UserDto userDto);
+
+	List<UserDto> getAllUsers(int limit, int offset);
 
 }

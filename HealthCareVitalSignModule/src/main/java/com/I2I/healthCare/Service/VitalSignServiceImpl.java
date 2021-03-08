@@ -1,6 +1,7 @@
 package com.I2I.healthCare.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
@@ -67,6 +68,11 @@ public class VitalSignServiceImpl implements VitalSignService {
 	@Override
 	public PatientDto getPatientDetails(long pId) {
 		return patientClient.getPatientDetailsById(pId);
+	}
+
+	@Override
+	public List<VitalSignDto> getCheckupDetails() {
+		return vitalSignDao.getCheckupDetails();
 	}
 
 }

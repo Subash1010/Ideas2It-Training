@@ -1,5 +1,8 @@
 package com.I2I.healthCare.Util;
 
+import java.sql.Date;
+import java.util.Calendar;
+
 import com.I2I.healthCare.Dto.VitalSignDto;
 import com.I2I.healthCare.Model.VitalSignEntity;
 
@@ -33,7 +36,11 @@ public class VitalSignDataUtil {
 		VitalSignDto vitalSignDto = new VitalSignDto();
 		vitalSignDto.setCheckupId(vitalSignEntity.getCheckupId());
 		vitalSignDto.setPatientId(vitalSignEntity.getPatientId());
-		vitalSignDto.setCheckupDate(vitalSignEntity.getCheckupDate());
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(vitalSignEntity.getCheckupDate());
+		String formatedNewDate = calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-"
+				+ calendar.get(Calendar.DATE);
+		vitalSignDto.setCheckupDate(Date.valueOf(formatedNewDate));
 		vitalSignDto.setPulseRate(vitalSignEntity.getPulseRate());
 		vitalSignDto.setBloodPressure(vitalSignEntity.getBloodPressure());
 		vitalSignDto.setTemperature(vitalSignEntity.getTemperature());

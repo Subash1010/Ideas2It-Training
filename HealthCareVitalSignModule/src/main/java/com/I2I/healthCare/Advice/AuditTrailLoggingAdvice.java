@@ -1,13 +1,13 @@
 package com.I2I.healthCare.Advice;
 
-import java.net.InetAddress;
-import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
+import org.apache.catalina.startup.UserConfig;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -17,11 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import com.I2I.healthCare.Config.UserConfig;
 import com.I2I.healthCare.Dto.AuditDto;
 import com.I2I.healthCare.Dto.DataDto;
-import com.I2I.healthCare.Dto.UserDto;
-import com.I2I.healthCare.Service.UserService;
+import com.I2I.healthCare.Dto.VitalSignDto;
+import com.I2I.healthCare.Service.VitalSignService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Aspect
@@ -30,17 +29,17 @@ public class AuditTrailLoggingAdvice {
 
 	@Autowired
 	public AuditTrailLoggingAdvice(KafkaTemplate<String, AuditDto> kafkaTemplate, RabbitTemplate rabbitTemplate,
-			UserService userService) {
+			VitalSignService vitalService) {
 		this.kafkaTemplate = kafkaTemplate;
 		this.rabbitTemplate = rabbitTemplate;
-		this.userService = userService;
+		this.vitalService = vitalService;
 	}
 
 	private KafkaTemplate<String, AuditDto> kafkaTemplate;
 
 	private RabbitTemplate rabbitTemplate;
 
-	private UserService userService;
+	private VitalSignService vitalService;
 
 	@Around("@annotation(com.I2I.healthCare.Advice.AuditTrailLogging)")
 	public Object applicationLogger(ProceedingJoinPoint pjp) throws Throwable {
@@ -50,17 +49,13 @@ public class AuditTrailLoggingAdvice {
 		String methodName = pjp.getSignature().getName();
 		Object[] inputArgs = pjp.getArgs();
 		String pattern = "[" + Pattern.quote("{[]}") + "]";
-		UserDto userDto = (UserDto) inputArgs[0];
-		long userId = userDto.getUserId();
-		UserDto beforeUpdate = userService.getUserById(userId);
 		long currentTimeMillis = System.currentTimeMillis();
 		Date currentLoggingDate = new Date(currentTimeMillis);
 		Time currentLoggingTime = new Time(currentTimeMillis);
-		InetAddress myHost = InetAddress.getLocalHost();
 		Object response = pjp.proceed();
-		UserDto newValue = (UserDto) response;
-		auditDto.setUserName(userConfig.getUserName());
-		auditDto.setServiceName("USER");
+		VitalSignDto newValue = (VitalSignDto) response;
+		auditDto.setUserName("User001");
+		auditDto.setServiceName("VITALSIGN");
 		auditDto.setMethodName(methodName);
 		auditDto.setRequest(mapper.writeValueAsString(inputArgs).replaceAll(pattern, ""));
 		auditDto.setAction(StringUtils.EMPTY);
@@ -70,33 +65,32 @@ public class AuditTrailLoggingAdvice {
 		List<String> fieldName = new ArrayList<>();
 		List<Object> oldList = new ArrayList<>();
 		List<Object> newList = new ArrayList<>();
-		if (Objects.nonNull(beforeUpdate)) {
-			if (!(beforeUpdate.getUserName().equals(newValue.getUserName()))) {
-				fieldName.add("User Name");
-				oldList.add(beforeUpdate.getUserName());
-				newList.add(newValue.getUserName());
-			}
-			if (!(beforeUpdate.getRoleId() == newValue.getRoleId())) {
-				fieldName.add("Role Id");
-				oldList.add(beforeUpdate.getRoleId());
-				newList.add(newValue.getRoleId());
-			}
-			dataDto.setFieldName(fieldName);
-			dataDto.setOldValue(oldList);
-			dataDto.setNewValue(newList);
-			auditDto.setData(dataDto);
-		} else {
-			fieldName.add("User Name");
-			newList.add(newValue.getUserName());
-			fieldName.add("Password");
-			newList.add(newValue.getPassword());
-			fieldName.add("Role Id");
-			newList.add(newValue.getRoleId());
-			dataDto.setFieldName(fieldName);
-			dataDto.setOldValue(oldList);
-			dataDto.setNewValue(newList);
-			auditDto.setData(dataDto);
-		}
+		fieldName.add("Patient Id");
+		newList.add(newValue.getPatientId());
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(newValue.getCheckupDate());
+		String formatedNewCheackupDate = calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-"
+				+ calendar.get(Calendar.DATE);
+		fieldName.add("Checkup Date");
+		newList.add(formatedNewCheackupDate);
+		fieldName.add("Pulse Rate");
+		newList.add(newValue.getPulseRate());
+		fieldName.add("Blood Pressure");
+		newList.add(newValue.getBloodPressure());
+		fieldName.add("Weight");
+		newList.add(newValue.getWeight());
+		fieldName.add("Height");
+		newList.add(newValue.getHeight());
+		fieldName.add("Body Temperature");
+		newList.add(newValue.getTemperature());
+		fieldName.add("Blood Sugar");
+		newList.add(newValue.getBloodSugar());
+		fieldName.add("Respiration Rate");
+		newList.add(newValue.getRespirationRate());
+		dataDto.setFieldName(fieldName);
+		dataDto.setOldValue(oldList);
+		dataDto.setNewValue(newList);
+		auditDto.setData(dataDto);
 		kafkaTemplate.send("Audit", auditDto);
 		rabbitTemplate.convertAndSend("healthcare_exchange", "healthcare_routing", auditDto);
 		return response;

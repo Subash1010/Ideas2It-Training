@@ -69,13 +69,13 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public String updatePatientDetails(PatientDto patientDto) {
+	public PatientDto updatePatientDetails(PatientDto patientDto) {
 		if (Objects.nonNull(patientDto)) {
 			PatientEntity patientEntity = PatientDataUtil.convertToPatientEntity(patientDto);
-			return patientDao.updatePatientDetails(patientEntity);
+			return PatientDataUtil.convertToPatientDto(patientDao.updatePatientDetails(patientEntity));
 		}
 		logger.error("Error in Addition of new record - Empty Record Can't be Updated");
-		return "Record not Updated";
+		return null;
 	}
 
 	@Override

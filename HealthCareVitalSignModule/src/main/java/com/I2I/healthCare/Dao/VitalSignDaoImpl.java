@@ -1,13 +1,16 @@
 package com.I2I.healthCare.Dao;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.I2I.healthCare.Dto.VitalSignDto;
 import com.I2I.healthCare.Model.VitalSignEntity;
@@ -78,6 +81,18 @@ public class VitalSignDaoImpl implements VitalSignDao {
 			return "Record not Deleted";
 		}
 		return "Record Deleted Successfully!!!";
+	}
+
+	@Override
+	public List<VitalSignDto> getCheckupDetails() {
+		List<VitalSignEntity> vitalSignEntityList = vitalSignRepository.findAll();
+		if (!CollectionUtils.isEmpty(vitalSignEntityList)) {
+			return vitalSignEntityList.stream().map(vitalSignEntity -> {
+				return VitalSignDataUtil.convertToVitalSignDto(vitalSignEntity);
+			}).collect(Collectors.toList());
+		} else {
+			return null;
+		}
 	}
 
 }

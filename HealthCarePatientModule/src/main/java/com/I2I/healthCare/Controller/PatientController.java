@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.I2I.healthCare.Advice.AuditTrailLogging;
 import com.I2I.healthCare.Dto.PatientDto;
 import com.I2I.healthCare.Service.PatientService;
 
@@ -45,6 +46,7 @@ public class PatientController {
 	 * @return String
 	 */
 	@PostMapping("/")
+	@AuditTrailLogging
 	public PatientDto addNewPatient(@RequestBody PatientDto patientDto) {
 		return patientService.addPatient(patientDto);
 	}
@@ -92,7 +94,8 @@ public class PatientController {
 	 */
 	@GetMapping("/{pId}")
 	public PatientDto getPatientDetailsById(@PathVariable long pId) {
-		return patientService.getPatientDetailsById(pId);
+		PatientDto pDto = patientService.getPatientDetailsById(pId);
+		return pDto;
 	}
 
 	/**
@@ -100,10 +103,11 @@ public class PatientController {
 	 * details.
 	 * 
 	 * @param patientDto
-	 * @return String
+	 * @return PatientDto
 	 */
 	@PutMapping("/")
-	public String updatePatientDetails(@RequestBody PatientDto patientDto) {
+	@AuditTrailLogging
+	public PatientDto updatePatientDetails(@RequestBody PatientDto patientDto) {
 		return patientService.updatePatientDetails(patientDto);
 	}
 
