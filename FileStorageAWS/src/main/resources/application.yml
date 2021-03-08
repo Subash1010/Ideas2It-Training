@@ -1,0 +1,9 @@
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAJJCNJ7OYXJARDIHA
+      secret-key: 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
+    region:      static: ap-south-1
+    stack:      auto: false
+      
+server:  port: 9090

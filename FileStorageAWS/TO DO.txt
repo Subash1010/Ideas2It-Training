@@ -1,0 +1,96 @@
+1. VSM & PM Auth
+DONE
+==================================================================================================================================
+2. Do we need to restart config server after config data modifying it.
+
+Not Needed to restart the server (We can use Web Hook and refresh the generated beans)
+==================================================================================================================================
+3. How actual MS gets data to reload the data??? (Also Ways to reload the data???)
+
+By using bus-refresh actuator the beans and configuration can be refreshed.
+==================================================================================================================================
+4. How to set profile using Maven run cmd (Dynamic) not hardcode in bootstrap.yml..
+
+spring-boot:run -Dspring-boot.run.profiles=prod
+==================================================================================================================================
+5. When key is not present in vault what does it returns??? 
+
+When vaule is not there it return like -> Field "dbpassword1" not present in secret.
+==================================================================================================================================
+6. If error occurs any others  ways to default vaule???
+
+If no key exists with that name, an error is returned. 
+If a key exists with the name but has no data, nothing is returned.
+==================================================================================================================================
+7. How to avoid SQL Injection? (Implement in MS)
+
+For JPARepository(Internally it prevents SQL Injection) no manual query is written and so it is done by default.
+==================================================================================================================================
+8. Change Auth to STATEFULL and set session out timing.
+
+Session Out Timing is set and there is no STATEFULL option available.
+The options are (ALWAYS, NEVER, IF_REQUIRED, STATELESS)
+==================================================================================================================================
+9. Retention Policy and its types and uses.
+
+    SOURCE  --> Annotations are to be discarded by the compiler.
+    CLASS   --> Present in Class File but not maintained at runtime.
+    RUNTIME --> Present in Class File and also maintained at runtime.
+==================================================================================================================================
+10. Does Redis update data even though no changes made in the existing one. 
+(Handle if there is no update)
+
+If there is no changes means Updation is not done in both MYSQL and REDIS
+==================================================================================================================================
+11. Swagger Api (Other sample java pages and documentation)
+
+Swagger UI
+ReDoc
+OpenAPI Generator
+
+==================================================================================================================================
+12. How to restrict the endpoints in actuator (Expose only used endpoints)
+
+Using the following we can expose the endpoints -> endpoints.web.exposure.include: '*'
+==================================================================================================================================
+13. Docker Bridge Network
+
+---Need Support---
+==================================================================================================================================
+14. Implement Entire Service Discovery
+
+DONE by implementing API GATEWAY
+(In API Gateway -> Dynamic routing is done by getting URL from the Consul)
+==================================================================================================================================
+15. Create a new authentication controller
+
+DONE
+==================================================================================================================================
+16. Naming Convention as per standard.
+
+DONE
+==================================================================================================================================
+17. Meaningful  exception message and JSON return Type.
+
+DONE
+==================================================================================================================================
+18. Create Util Files and move DTO conversion codes
+
+DONE
+==================================================================================================================================
+
+
+
+1. No need port filteration instead use authentication for each MS.
+2. Cloud refresh change to cloud config server itself.
+3. Describe every methods in Swagger UI for clear understanding.
+4. How Zuul connects with Consul
+5. Audit trail using RabbitMQ.
+6. Implement ES in Patient module and search operations.
+
+
+
+
+==================================
+
+1. How Old data is maintained in jager.

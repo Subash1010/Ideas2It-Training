@@ -1,0 +1,17 @@
+{
+  "name": "trigger",
+  "version": "1.0.0",
+  "description": "Trigger",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.857.0",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.4.23"
+  }
+}
