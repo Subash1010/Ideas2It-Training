@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import UserService from '../../service/UserService';
+import HeaderComponent from '../HomePage/HeaderComponent';
 
 class UpdateUserComponent extends Component {
     constructor(props) {
@@ -55,7 +56,6 @@ class UpdateUserComponent extends Component {
         if ((users.userName !== undefined && users.userName !== null && users.userName !== "") &&
             (users.password !== undefined && users.password !== null && users.password !== "") &&
             (users.roleId !== undefined && users.roleId !== null && users.roleId !== "")) {
-            console.log(users);
             UserService.updateUser(users).then(res => {
                 this.props.history.push("/users");
             });
@@ -67,7 +67,7 @@ class UpdateUserComponent extends Component {
         UserService.getUserById(this.state.userId).then((res) => {
             let users = res.data;
             this.setState({ userName: users.userName });
-            if(users.password !== undefined && users.password !== null && users.password !== ""){
+            if (users.password !== undefined && users.password !== null && users.password !== "") {
                 this.setState({ password: users.password });
             } else {
                 this.setState({ password: "" });
@@ -78,59 +78,64 @@ class UpdateUserComponent extends Component {
 
     render() {
         return (
-            <Container maxWidth="sm">
-                <div>
-                    <Box mt={5}></Box>
-                    <form className={this.classes.root} noValidate autoComplete="off">
-                        <div>
-                            <TextField
-                                required
-                                id="userName"
-                                label="User Name"
-                                variant="outlined"
-                                onChange={this.updateUserName}
-                                value={this.state.userName}>
-                            </TextField>
-                            <Box mt={5}></Box>
-                            <TextField
-                                required
-                                id="password"
-                                label="Password"
-                                type="password"
-                                variant="outlined"
-                                onChange={this.updatePassword}
-                                value={this.state.password}>
-                            </TextField>
-                            <Box mt={5}></Box>
-                            <TextField
-                                required
-                                id="roleId"
-                                label="Role Id"
-                                variant="outlined"
-                                onChange={this.updateRoleId}
-                                value={this.state.roleId}>
-                            </TextField>
-                        </div>
-                        <Box mt={5}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={this.onUpdate}
-                                size="small"
-                                startIcon={<SaveIcon />}>
-                                Update Record
+            <div>
+                <Container>
+                    <HeaderComponent />
+                </Container>
+                <Container maxWidth="sm">
+                    <div>
+                        <Box mt={5}></Box>
+                        <form className={this.classes.root} noValidate autoComplete="off">
+                            <div>
+                                <TextField
+                                    required
+                                    id="userName"
+                                    label="User Name"
+                                    variant="outlined"
+                                    onChange={this.updateUserName}
+                                    value={this.state.userName}>
+                                </TextField>
+                                <Box mt={5}></Box>
+                                <TextField
+                                    required
+                                    id="password"
+                                    label="Password"
+                                    type="password"
+                                    variant="outlined"
+                                    onChange={this.updatePassword}
+                                    value={this.state.password}>
+                                </TextField>
+                                <Box mt={5}></Box>
+                                <TextField
+                                    required
+                                    id="roleId"
+                                    label="Role Id"
+                                    variant="outlined"
+                                    onChange={this.updateRoleId}
+                                    value={this.state.roleId}>
+                                </TextField>
+                            </div>
+                            <Box mt={5}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={this.onUpdate}
+                                    size="small"
+                                    startIcon={<SaveIcon />}>
+                                    Update Record
                             </Button>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                size="small"
-                                href="http://localhost:3000/users">
-                                Cancel Record
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    size="small"
+                                    href="http://localhost:3000/users">
+                                    Cancel Record
                         </Button>
-                        </Box>
-                    </form>
-                </div>
-            </Container>
+                            </Box>
+                        </form>
+                    </div>
+                </Container>
+            </div>
         );
     }
 }

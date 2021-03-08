@@ -4,7 +4,7 @@ const PATIENT_BASE_URL = "http://localhost:8080/patients";
 
 const PATIENT_SEARCH_BASE_URL = "http://localhost:8080/patientsearch";
 
-const BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyMDAxIiwiZXhwIjoxNjE0NzIyMzk5LCJpYXQiOjE2MTQ2ODYzOTl9.E6k0_3TakqSAiJxcZDStAZve90Ue55qmI8Fq87oq-1A";
+const BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyMDAxIiwiZXhwIjoxNjE0OTgwNTQyLCJpYXQiOjE2MTQ5NDQ1NDJ9.WpfWgALE7RhtLluZ5BUia6uzPSlDagatUVF3SwB-QHk";
 
 class PatientService {
 

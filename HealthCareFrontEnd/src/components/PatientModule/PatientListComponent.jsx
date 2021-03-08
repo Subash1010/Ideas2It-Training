@@ -16,6 +16,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import HeaderComponent from '../HomePage/HeaderComponent';
 
 class PatientListComponent extends Component {
     constructor(props) {
@@ -29,12 +30,38 @@ class PatientListComponent extends Component {
         this.updatePatient = this.updatePatient.bind(this);
         this.deletePatient = this.deletePatient.bind(this);
         this.searchInput = this.searchInput.bind(this);
+        this.searchResult = this.searchResult.bind(this);
     }
 
-    componentDidMount() {
-        PatientService.getAllPatients().then((res) => {
-            this.setState({ patients: res.data });
-        })
+    componentDidMount(searchInput) {
+        if(searchInput === "" || searchInput === undefined){
+            PatientService.getAllPatients().then((res) => {
+                this.setState({ patients: res.data });
+            });
+        } else {
+            this.searchResult(searchInput);
+        }
+    }
+
+    async searchResult(searchInput) {
+        var searchHitIds = [];
+        await PatientService.getPatientByName(searchInput).then((res) => {
+            console.log(res);
+            (res.data.searchHits).map(currentHit => {
+                return searchHitIds[currentHit.id] = currentHit.id;
+            });
+        });
+        var searchresult = [];
+        await PatientService.getAllPatients().then((response) => {
+            response.data.forEach(currentRecord => {
+                if(searchHitIds[currentRecord.patientId] !== undefined && 
+                    searchHitIds[currentRecord.patientId] !== null &&
+                    searchHitIds[currentRecord.patientId] !== "" ){
+                        searchresult.push(currentRecord);
+                    }
+                });
+            });
+        await this.setState({ patients: searchresult });
     }
 
     updatePatient(id) {
@@ -43,46 +70,20 @@ class PatientListComponent extends Component {
 
     deletePatient(id) {
         PatientService.deletePatient(id).then((res) => {
-            this.componentDidMount();
+            this.componentDidMount("");
         });
     }
 
     searchInput = (event) => {
         this.setState({ searchInput: event.target.value });
-
-        PatientService.getPatientByName(event.target.value).then((res) => {
-            let patient = res.data;
-            this.setState({ firstName: patient.firstName });
-            this.setState({ lastName: patient.lastName});
-            if((patient.dob !== undefined && patient.dob !== null && patient.dob !== "")){
-                this.setState({ dob: patient.dob.slice(0, 10) });
-            } else {
-                this.setState({ dob: ""});
-            }
-            this.setState({ age: patient.age });
-            this.setState({ phoneNumber: patient.phoneNumber });
-            this.setState({ alternatePhoneNumber: patient.alternatePhoneNumber });
-            this.setState({ gender: patient.gender });
-            this.setState({ permanentAddress: patient.permanentAddress });
-            this.setState({ communicationAddress: patient.communicationAddress });
-            this.setState({ email: patient.email });
-            if((patient.initialAdmitDate !== undefined && patient.initialAdmitDate !== null && patient.initialAdmitDate !== "")){
-                this.setState({ initialAdmitDate: patient.initialAdmitDate.slice(0, 10) });
-            } else {
-                this.setState({ initialAdmitDate: ""});
-            }
-            if((patient.latestAdmitDate !== undefined && patient.latestAdmitDate !== null && patient.latestAdmitDate !== "")){
-                this.setState({ latestAdmitDate: patient.latestAdmitDate.slice(0, 10) });
-            } else {
-                this.setState({ latestAdmitDate: ""});
-            }
-        });
+        this.componentDidMount(event.target.value);
     }
 
     render() {
         return (
-            
+
             <Container>
+                <HeaderComponent />
                 <Box mt={5}></Box>
                 <Container maxWidth="sm">
                     <Button
@@ -105,7 +106,7 @@ class PatientListComponent extends Component {
                         label="Search"
                         variant="outlined"
                         onChange={this.searchInput}
-                        fullWidth= {true}
+                        fullWidth={true}
                     />
                     <Box mt={5}>
                         <div className="addIcon">
