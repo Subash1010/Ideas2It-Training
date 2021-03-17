@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.I2I.healthCare.Dto.PatientDto;
 
 @FeignClient(url = "${vitalsignmodule.patient.client.url}", name = "${vitalsignmodule.patient.client.name}")
+@FunctionalInterface
 public interface PatientClient {
 
 	@GetMapping("/{pId}")

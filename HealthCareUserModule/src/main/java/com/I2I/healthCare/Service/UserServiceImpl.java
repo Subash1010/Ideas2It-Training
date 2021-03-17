@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +62,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+	Consumer<String> errorConsumer = exception -> logger.error(exception);
+
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		Optional<UserEntity> optionalUserEntity = userRepository.findByUserName(userName);
@@ -77,7 +80,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					userAuthenticateRequest.getUserName(), userAuthenticateRequest.getPassword()));
 		} catch (BadCredentialsException exception) {
-			logger.error("Incorrect UserName or Password", exception);
+			logger.error("Incorrect UserName or Password");
+			errorConsumer.accept(exception.toString());
 			return StringUtils.EMPTY;
 		}
 

@@ -3,6 +3,7 @@ package com.I2I.healthCare.Dao;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -29,13 +30,16 @@ public class UserDaoImpl implements UserDao {
 
 	Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
+	Consumer<String> errorConsumer = exception -> logger.error(exception);
+
 	@Override
 	public UserEntity addNewUser(UserEntity userEntity) {
 		UserEntity savedUserEntity = new UserEntity();
 		try {
 			savedUserEntity = userRepository.save(userEntity);
 		} catch (Exception exception) {
-			logger.error("Error in insertion of new record" + exception);
+			logger.error("Error in insertion of new record");
+			errorConsumer.accept(exception.toString());
 			return savedUserEntity;
 		}
 		logger.info("Added new record Successfully!!! UserId is " + savedUserEntity.getUserId());
@@ -93,7 +97,8 @@ public class UserDaoImpl implements UserDao {
 				return null;
 			}
 		} catch (Exception exception) {
-			logger.error("Error in Updation of the record" + exception);
+			logger.error("Error in Updation of the record");
+			errorConsumer.accept(exception.toString());
 			return null;
 		}
 	}

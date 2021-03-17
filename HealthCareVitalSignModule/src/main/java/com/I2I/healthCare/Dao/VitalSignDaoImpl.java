@@ -3,6 +3,7 @@ package com.I2I.healthCare.Dao;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -31,12 +32,15 @@ public class VitalSignDaoImpl implements VitalSignDao {
 
 	Logger logger = LoggerFactory.getLogger(VitalSignDaoImpl.class);
 
+	Consumer<String> errorConsumer = exception -> logger.error(exception);
+
 	@Override
 	public VitalSignEntity addPatient(VitalSignEntity vitalSignEntity) {
 		try {
 			return vitalSignRepository.save(vitalSignEntity);
 		} catch (Exception exception) {
-			logger.error("Error in insertion of new record" + exception);
+			logger.error("Error in insertion of new record");
+			errorConsumer.accept(exception.toString());
 			return null;
 		}
 	}
@@ -58,11 +62,12 @@ public class VitalSignDaoImpl implements VitalSignDao {
 			if (Objects.nonNull(existingVitalSignDto)) {
 				return vitalSignRepository.save(vitalSignEntity);
 			} else {
-				logger.error("No Record is found for Updation");
+				errorConsumer.accept("No Record is found for Updation");
 				return null;
 			}
 		} catch (Exception exception) {
-			logger.error("Error in Updation of the record" + exception);
+			logger.error("Error in Updation of the record");
+			errorConsumer.accept(exception.toString());
 			return null;
 		}
 	}
@@ -77,7 +82,8 @@ public class VitalSignDaoImpl implements VitalSignDao {
 				return "Record Not Found For Deletion.";
 			}
 		} catch (Exception exception) {
-			logger.error("Error in Deletion of the record" + exception);
+			logger.error("Error in Deletion of the record");
+			errorConsumer.accept(exception.toString());
 			return "Record not Deleted";
 		}
 		return "Record Deleted Successfully!!!";

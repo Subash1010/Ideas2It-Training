@@ -1,6 +1,7 @@
 package com.I2I.healthCare.Dao;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,12 +23,15 @@ public class RoleDaoImpl implements RoleDao {
 
 	Logger logger = LoggerFactory.getLogger(RoleDaoImpl.class);
 
+	Consumer<String> errorConsumer = exception -> logger.error(exception);
+
 	@Override
 	public String addNewRole(RoleEntity roleEntity) {
 		try {
 			entityManger.persist(roleEntity);
 		} catch (Exception exception) {
-			logger.error("Error in Addition of new record" + exception);
+			logger.error("Error in Addition of new record");
+			errorConsumer.accept(exception.toString());
 			return "Record not Added";
 		}
 		return "Record Added Successfully!!!";
@@ -42,11 +46,12 @@ public class RoleDaoImpl implements RoleDao {
 				existingRoleEntity.setRoleName(roleEntity.getRoleName());
 				return entityManger.merge(roleEntity);
 			} else {
-				logger.error("No Record is found for Updation");
+				errorConsumer.accept("No Record is found for Updation");
 				return null;
 			}
 		} catch (Exception exception) {
 			logger.error("Error in Updation of the record" + exception);
+			errorConsumer.accept(exception.toString());
 			return null;
 		}
 	}

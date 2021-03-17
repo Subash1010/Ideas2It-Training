@@ -2,9 +2,12 @@ package com.I2I.healthCare.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
@@ -34,6 +37,10 @@ public class PatientIndexServiceImpl implements PatientIndexService {
 
 	private ElasticsearchOperations elasticsearchOperations;
 
+	Logger logger = LoggerFactory.getLogger(PatientIndexServiceImpl.class);
+
+	Consumer<String> errorConsumer = exception -> logger.error(exception);
+
 	@Override
 	public PatientIndex save(PatientIndex patientIndex) {
 		return patientIndexRepository.save(patientIndex);
@@ -44,7 +51,7 @@ public class PatientIndexServiceImpl implements PatientIndexService {
 		try {
 			patientIndexRepository.deleteById(pId);
 		} catch (Exception exception) {
-			System.out.println(exception);
+			errorConsumer.accept(exception.toString());
 			return "Record Not Deleted";
 		}
 		return "Record Deleted Successfully!!!";
