@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  cloudConfigServer:
+    image: cloud-config-server.jar
+    ports:
+      - '8888:8888'
+    environment:
+      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://github.com/Subash1010/Ideas2It-Training
+    networks:
+      - vitalsignnetwork
+  db:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=Test@1234
+      - MYSQL_DATABASE=localdb
+      - MYSQL_ROOT_HOST=localhost
+    expose:
+      - '3306'
+    networks:
+      - vitalsignnetwork
+  maxwell:
+    image: maxwell
+    links:
+      - db
+      - kafka
+    environment:
+      - MYSQL_USER=
+      - MYSQL_PASSWORD=password
+      - REPLICATION_USER=maxwell
+      - REPLICATION_PASSWORD=password
+    restart: always
+    networks:
+      - vitalsignnetwork
+  vitalsignmodule:
+    image: vitalsign.jar
+    ports:
+      - '8080:8080'
+    environment:
+      SPRING_APPLICATION_JSON: '{"spring": {"cloud": {"config": {"uri": "http://cloudConfigServer:8888"}}}}'
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/healthcare?createDatabaseIfNotExist=true&autoReconnect=true
+      VAULT_ADDR: 'http://0.0.0.0:8200'
+      VAULT_DEV_ROOT_TOKEN_ID: '00000000-0000-0000-0000-000000000000'
+      VAULT_TOKEN: '00000000-0000-0000-0000-000000000000'
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - cloudConfigServer
+      - db
+    networks:
+      - vitalsignnetwork
+networks:
+  patientnetwork:
+    name: vitalsignnetwork

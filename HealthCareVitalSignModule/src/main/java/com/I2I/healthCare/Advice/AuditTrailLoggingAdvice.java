@@ -91,8 +91,8 @@ public class AuditTrailLoggingAdvice {
 		dataDto.setOldValue(oldList);
 		dataDto.setNewValue(newList);
 		auditDto.setData(dataDto);
-		kafkaTemplate.send("Audit", auditDto);
-		rabbitTemplate.convertAndSend("healthcare_exchange", "healthcare_routing", auditDto);
+//		kafkaTemplate.send("Audit", auditDto);
+//		rabbitTemplate.convertAndSend("healthcare_exchange", "healthcare_routing", auditDto);
 		return response;
 	}
 }

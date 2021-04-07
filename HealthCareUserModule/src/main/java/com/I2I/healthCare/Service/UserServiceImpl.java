@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-	Consumer<String> errorConsumer = exception -> logger.error(exception);
+	Consumer<Object> errorConsumer = exception1 -> System.out.println(exception1);
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 					userAuthenticateRequest.getUserName(), userAuthenticateRequest.getPassword()));
 		} catch (BadCredentialsException exception) {
 			logger.error("Incorrect UserName or Password");
-			errorConsumer.accept(exception.toString());
+			errorConsumer.accept(exception);
 			return StringUtils.EMPTY;
 		}
 
