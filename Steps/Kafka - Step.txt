@@ -1,0 +1,47 @@
+Execute all these commands from C:\Users\Windows\Downloads\Softwares\Kafka\kafka_2.12-2.7.0 folder
+
+Start Zookeeper Server:-
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+Start Kafka Server:-
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+Create Kafka Topics:-
+.\bin\windows\kafka-topics.bat --create --topic event01 --bootstrap-server localhost:9092
+
+.\bin\windows\kafka-topics.bat --create --topic Audit --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+bin/kafka-topics.sh --create --topic Audit --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+
+
+CHeck if Topic is created:-
+.\bin\windows\kafka-topics.bat --zookeeper localhost:2181 --list
+
+To Publist to Kafka from bin log:-
+.\bin\windows\kafka-console-producer.bat --topic Audit --broker-list localhost:9092
+
+
+Start Producer Server:-
+.\bin\windows\kafka-console-producer.bat --topic event01 --bootstrap-server localhost:9092
+.\bin\windows\kafka-console-producer.bat --topic Audit --bootstrap-server localhost:9092
+
+Start Consumer Server:-
+.\bin\windows\kafka-console-consumer.bat --topic event01 --from-beginning --bootstrap-server localhost:9092
+.\bin\windows\kafka-console-consumer.bat --topic Audit --from-beginning --bootstrap-server localhost:9092
+
+
+
+
+.\bin\kafka-delete-records.sh --bootstrap-server localhost:9092
+
+
+
+====================
+UBUNTU
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+
+
+DESKTOP-PDO2TL7.localdomain

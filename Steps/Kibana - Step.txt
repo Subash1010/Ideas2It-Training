@@ -1,0 +1,4 @@
+Go here
+C:\Users\Windows\Downloads\Softwares\Kibana\kibana-7.11.0-windows-x86_64\bin
+
+run kibana.bat

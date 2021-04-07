@@ -1,0 +1,11 @@
+bin/maxwell --config config.properties --user='root' --password='Test@1234' --schema_database=vitalsign --host='127.0.0.1' --kafka_version=2.7.0 --producer=kafka --port=3306 --kafka.bootstrap.servers=localhost:9092 --kafka_topic=Audit
+
+bin/maxwell --config config.properties --user='root' --password='Test@1234' --host='127.0.0.1' --producer=stdout
+
+
+sudo apt-get autoremove default-jdk openjdk-8-jdk
+
+
+aws dynamodb scan --table-name AuditVitalSign13 --endpoint-url http://localhost:4566
+aws dynamodb describe-table --table-name AuditVitalSign11 --endpoint-url http://localhost:4566
+aws dynamodb list-tables --endpoint-url http://localhost:4566

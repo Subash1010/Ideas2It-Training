@@ -1,0 +1,3 @@
+subashboss1010@gmail.com / Boss@10101995
+
+./ngrok authtoken 1oZ1tHVDbj1Z6p8YalUkqLXE4I1_hsC5W5RD7TBYKXqbSTVD

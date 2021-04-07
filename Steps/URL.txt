@@ -1,0 +1,5 @@
+CONSUL  :   http://localhost:8500/ui
+SWAGGER :   http://localhost:8082/swagger-ui.html 
+RABBITMQ:   http://localhost:15672/
+KIBANA  :   http://localhost:5601
+JAEGER  :   http://localhost:16686/search

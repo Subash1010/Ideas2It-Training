@@ -1,0 +1,7 @@
+Go to 
+C:\Users\Windows\Downloads\Softwares\LogStash\logstash-7.11.0\bin
+
+
+RUN
+
+logstash -f logstash.conf

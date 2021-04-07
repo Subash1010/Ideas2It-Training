@@ -1,0 +1,33 @@
+vault server -config ./vaultconfig.hcl
+set VAULT_ADDR=http://0.0.0.0:8200
+vault operator init
+set VAULT_TOKEN=00000000-0000-0000-0000-000000000000
+vault operator unseal LMGT/HTA5jMbgU+3cY8o7GVHx9EmwtJOG9g7U06aCZ0=
+vault secrets enable -path=secret/ kv
+vault kv put secret/HealthCarePatientModule dbusername=root dbpassword=Test@1234
+vault kv get secret/HealthCarePatientModule
+
+
+vault server --dev --dev-root-token-id="00000000-0000-0000-0000-000000000000"
+set VAULT_ADDR=http://127.0.0.1:8200
+set VAULT_TOKEN=00000000-0000-0000-0000-000000000000
+vault kv put secret/HealthCareUserModule dbusername=root dbpassword=Test@1234
+vault kv put secret/HealthCarePatientModule dbusername=root dbpassword=Test@1234
+
+vault kv put secret/HealthCareVitalSignModule dbusername=root dbpassword=Test@1234 vitalsignmodule.patient.client.url=http://localhost:8081/patient vitalsignmodule.patient.client.name=patientClient
+
+vault kv get secret/usermodule
+
+-------------------
+docker run -itd --network=patientmodule --cap-add=IPC_LOCK -e VAULT_DEV_ROOT_TOKEN_ID=00000000-0000-0000-0000-000000000000 -e VAULT_DEV_LISTEN_ADDRESS=127.0.0.1:8200 --name=vault vault
+
+docker run --network=patientmodule --cap-add=IPC_LOCK -e VAULT_DEV_ROOT_TOKEN_ID=00000000-0000-0000-0000-000000000000 -e VAULT_DEV_LISTEN_ADDRESS=127.0.0.1:8200 VAULT_API_ADDR=http://localhost:8200 --name=vault vault
+
+docker run --network=patientnetwork --rm --cap-add=IPC_LOCK -e VAULT_DEV_ROOT_TOKEN_ID=00000000-0000-0000-0000-000000000000 -e VAULT_ADDR=http://localhost:8200 -p 8200:8200 -d --name=vault vault
+
+docker exec -it vault /bin/sh
+export VAULT_ADDR=http://0.0.0.0:8200
+export VAULT_TOKEN=00000000-0000-0000-0000-000000000000
+vault auth list
+vault kv put secret/HealthCarePatientModule dbusername=root dbpassword=Test@1234
+vault kv get secret/HealthCarePatientModule
